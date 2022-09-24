@@ -44,8 +44,6 @@ public class ManualDriveDookie extends LinearOpMode {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turnTable.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gandalfStaff.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        eyeball.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         gandalfStaff.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         gandalfStaff.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turnTable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -161,19 +159,6 @@ public class ManualDriveDookie extends LinearOpMode {
                 clampy.setPosition(0.96); //close
             }
             telemetry.addData("clamp", clampy.getPosition());
-
-
-            /**********************************/
-            /** Duck Spinner Control Section **/
-            /**********************************/
-            if(gamepad1.right_trigger>0){
-                eyeball.setPower(gamepad1.right_trigger);
-            }else if(gamepad1.left_trigger>0){
-                eyeball.setPower(-gamepad1.left_trigger);
-            }else{
-                eyeball.setPower(0);
-            }
-
             telemetry.update();
         }
 

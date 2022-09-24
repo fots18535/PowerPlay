@@ -19,11 +19,6 @@ public class HunkOfMetal {
     DcMotor turnTable;
     DcMotor eyeball;
     Servo clampy;
-    ColorTester black;
-    ColorTester red;
-    ColorTester blue;
-    ColorTester green;
-
 
     float ticksPerInch = 122.15f;
     float gyroCorrection = -0.04f;
@@ -57,12 +52,6 @@ public class HunkOfMetal {
         gandalfStaff.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turnTable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turnTable.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        black = new ColorTester(106.6f, 233.1f, 0.201f, 0.493f, 0.009f, 0.015f);
-        red = new ColorTester(0, 1, 0, 1, 0, 1);
-        blue = new ColorTester(0, 1, 0, 1, 0, 1);
-        green = new ColorTester(0, 1, 0, 1, 0, 1);
-
         clampy.setPosition(0.52);
         gyro.startGyro();
     }
