@@ -16,9 +16,11 @@ public class HunkOfMetal {
     DcMotor gandalfStaff;
     LinearOpMode mode;
     TouchSensor maggot;
-    DcMotor turnTable;
+    DcMotor slideMotor;
     DcMotor eyeball;
-    Servo clampy;
+    Servo intakeWheelDeux;
+    Servo intakeWheel;
+
 
     float ticksPerInch = 122.15f;
     float gyroCorrection = -0.04f;
@@ -36,23 +38,14 @@ public class HunkOfMetal {
         leftFront = mode.hardwareMap.get(DcMotor.class, "leftFront");
         rightBack = mode.hardwareMap.get(DcMotor.class, "rightBack");
         rightFront = mode.hardwareMap.get(DcMotor.class, "rightFront");
+        intakeWheel = mode.hardwareMap.get(Servo.class, "leftIntake");
+        intakeWheelDeux = mode.hardwareMap.get(Servo.class, "rightIntake");
+        slideMotor = mode.hardwareMap.get(DcMotor.class, "slideMotor");
 
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        gandalfStaff = mode.hardwareMap.get(DcMotor.class, "staff");
-        maggot = mode.hardwareMap.get(TouchSensor.class, "maggot");
-        turnTable = mode.hardwareMap.get(DcMotor.class, "turnTable");
-        eyeball = mode.hardwareMap.get(DcMotor.class, "eyeball");
-        clampy = mode.hardwareMap.get(Servo.class, "clampy");
-
-        gandalfStaff.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        gandalfStaff.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        turnTable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turnTable.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clampy.setPosition(0.52);
         gyro.startGyro();
     }
 
@@ -311,15 +304,6 @@ public class HunkOfMetal {
         }
     }
 
-    public void openClampy() {
-        clampy.setPosition(0.52); // open
-    }
-
-    public void closeClampy() {
-        clampy.setPosition(0.96); //close
-    }
-    // TODO: open and close claw
-
     public void spinEyeballCW() {
         eyeball.setPower(1);
         long start = System.currentTimeMillis();
@@ -337,6 +321,47 @@ public class HunkOfMetal {
         }
         eyeball.setPower(0);
     }
+
+    // Code for spinning the wheels
+    // Press the button once or hold the button down?
+
+    //positive for spinning wheels in?
+    public void spinWheelsInRight()
+    {
+        intakeWheelDeux.setPosition(1.0);
+    }
+
+    //negative for spinning wheels out?
+        public void spinWheelsOutRight()
+        {
+        intakeWheelDeux.setPosition(-1.0);
+        }
+
+    public void spinWheelsOutLeft()
+    {
+        intakeWheel.setPosition(-1.0);
+    }
+
+    public void spinWheelsInLeft()
+    {
+        intakeWheel.setPosition(1.0);
+    }
+
+    public void wind()
+    {
+        slideMotor.setPower(0.5);
+    }
+
+    public void unwind()
+    {
+        slideMotor.setPower(-0.5);
+    }
+
+    public void stopWind()
+    {
+        slideMotor.setPower(0.0);
+    }
+
 }
 
 

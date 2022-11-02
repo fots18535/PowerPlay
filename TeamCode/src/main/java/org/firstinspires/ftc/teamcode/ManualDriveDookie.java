@@ -16,6 +16,7 @@ public class ManualDriveDookie extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightBack;
     DcMotor rightFront;
+    HunkOfMetal hunk;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,12 +24,14 @@ public class ManualDriveDookie extends LinearOpMode {
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        hunk = new HunkOfMetal(this);
 
         // Stops coasting
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hunk.initialize();
 
         waitForStart();
         boolean encoderReset = false;
@@ -58,8 +61,29 @@ public class ManualDriveDookie extends LinearOpMode {
             rightBack.setPower(rightX - rightY + leftX);
             rightFront.setPower(rightX - rightY - leftX);
 
+            if(gamepad1.a)
+            {
+                hunk.spinWheelsInRight();
+                hunk.spinWheelsInLeft();
+            }
+            else if(gamepad1.b)
+            {
+                hunk.spinWheelsOutRight();
+                hunk.spinWheelsOutLeft();
+            }
 
-
+            if(gamepad1.x)
+            {
+                hunk.wind();
+            }
+            else if(gamepad1.y)
+            {
+                hunk.unwind();
+            }
+            else
+            {
+                hunk.stopWind();
+            }
         }
     }
 }
