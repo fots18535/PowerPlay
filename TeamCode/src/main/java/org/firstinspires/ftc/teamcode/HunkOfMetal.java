@@ -351,16 +351,20 @@ public class HunkOfMetal {
     {
         slideMotor.setPower(0.5);
     }
+    // Raise cone to certain height based encoder ticks
 
     public void unwind()
     {
         slideMotor.setPower(-0.5);
     }
+    // Lower cone until sensor triggers
 
     public void stopWind()
     {
         slideMotor.setPower(0.0);
     }
+
+    public int getTicks(){return slideMotor.getCurrentPosition();}
 
 }
 

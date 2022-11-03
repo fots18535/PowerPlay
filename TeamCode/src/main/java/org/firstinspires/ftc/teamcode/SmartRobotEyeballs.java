@@ -49,8 +49,8 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-public class ConceptTensorFlowObjectDetection {
-    public ConceptTensorFlowObjectDetection(LinearOpMode op234){
+public class SmartRobotEyeballs {
+    public SmartRobotEyeballs(LinearOpMode op234){
         op = op234;
     }
 

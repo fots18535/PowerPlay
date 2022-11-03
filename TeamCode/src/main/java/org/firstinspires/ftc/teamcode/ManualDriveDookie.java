@@ -61,29 +61,26 @@ public class ManualDriveDookie extends LinearOpMode {
             rightBack.setPower(rightX - rightY + leftX);
             rightFront.setPower(rightX - rightY - leftX);
 
-            if(gamepad1.a)
-            {
+            if (gamepad1.a) {
                 hunk.spinWheelsInRight();
                 hunk.spinWheelsInLeft();
-            }
-            else if(gamepad1.b)
-            {
+            } else if (gamepad1.b) {
                 hunk.spinWheelsOutRight();
                 hunk.spinWheelsOutLeft();
             }
 
-            if(gamepad1.x)
-            {
+            if (gamepad1.x) {
                 hunk.wind();
-            }
-            else if(gamepad1.y)
-            {
+
+            } else if (gamepad1.y) {
                 hunk.unwind();
-            }
-            else
-            {
+            } else {
                 hunk.stopWind();
             }
+
+            // Linear slide
+            telemetry.addData("ticks", hunk.getTicks());
+            telemetry.update();
         }
     }
 }

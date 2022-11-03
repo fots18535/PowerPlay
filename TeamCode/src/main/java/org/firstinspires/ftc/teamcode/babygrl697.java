@@ -7,7 +7,7 @@ public class babygrl697 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        ConceptTensorFlowObjectDetection baby = new ConceptTensorFlowObjectDetection(this);
+        SmartRobotEyeballs baby = new SmartRobotEyeballs(this);
         baby.initialize();
         waitForStart();
         while (opModeIsActive()){
