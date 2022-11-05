@@ -366,6 +366,23 @@ public class HunkOfMetal {
 
     public int getTicks(){return slideMotor.getCurrentPosition();}
 
+    public void placeCone()
+    {
+        slideMotor.setPower(1.0);
+        while(mode.opModeIsActive() && slideMotor.getCurrentPosition() < 100)
+        {
+        }
+        slideMotor.setPower(0.0);
+        intakeWheel.setPosition(1.0);
+        intakeWheelDeux.setPosition(1.0);
+        slideMotor.setPower(-1.0);
+        while(mode.opModeIsActive() && slideMotor.getCurrentPosition() > 0)
+        {
+        }
+        slideMotor.setPower(0.0);
+    }
+
+
 }
 
 

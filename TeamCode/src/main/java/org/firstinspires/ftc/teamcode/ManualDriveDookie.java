@@ -69,6 +69,7 @@ public class ManualDriveDookie extends LinearOpMode {
                 hunk.spinWheelsOutLeft();
             }
 
+            //Wind/unwind linear slide
             if (gamepad1.x) {
                 hunk.wind();
 
