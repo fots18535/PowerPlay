@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -18,8 +19,9 @@ public class HunkOfMetal {
     TouchSensor maggot;
     DcMotor slideMotor;
     DcMotor eyeball;
-    Servo intakeWheelDeux;
-    Servo intakeWheel;
+    CRServo intakeWheelDeux;
+    CRServo intakeWheel;
+    TouchSensor mag;
 
 
     float ticksPerInch = 122.15f;
@@ -38,9 +40,10 @@ public class HunkOfMetal {
         leftFront = mode.hardwareMap.get(DcMotor.class, "leftFront");
         rightBack = mode.hardwareMap.get(DcMotor.class, "rightBack");
         rightFront = mode.hardwareMap.get(DcMotor.class, "rightFront");
-        intakeWheel = mode.hardwareMap.get(Servo.class, "leftIntake");
-        intakeWheelDeux = mode.hardwareMap.get(Servo.class, "rightIntake");
+        intakeWheel = mode.hardwareMap.get(CRServo.class, "leftIntake");
+        intakeWheelDeux = mode.hardwareMap.get(CRServo.class, "rightIntake");
         slideMotor = mode.hardwareMap.get(DcMotor.class, "slideMotor");
+        mag = mode.hardwareMap.get(TouchSensor.class, "magSense");
 
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -304,48 +307,24 @@ public class HunkOfMetal {
         }
     }
 
-    public void spinEyeballCW() {
-        eyeball.setPower(1);
-        long start = System.currentTimeMillis();
-        while(System.currentTimeMillis() - start < 2500 && mode.opModeIsActive()) {
-            mode.idle();
-        }
-        eyeball.setPower(0);
-    }
-
-    public void spinEyeballCCW() {
-        eyeball.setPower(-1);
-        long start = System.currentTimeMillis();
-        while(System.currentTimeMillis() - start < 2500 && mode.opModeIsActive()) {
-            mode.idle();
-        }
-        eyeball.setPower(0);
-    }
-
     // Code for spinning the wheels
     // Press the button once or hold the button down?
 
-    //positive for spinning wheels in?
-    public void spinWheelsInRight()
-    {
-        intakeWheelDeux.setPosition(1.0);
-    }
+   public void intakeCone(){
+       intakeWheel.setPower(1.0);
+       intakeWheelDeux.setPower(-1.0);
+       mode.sleep(1000);
+       intakeWheel.setPower(0.0);
+       intakeWheelDeux.setPower(0.0);
+   }
 
-    //negative for spinning wheels out?
-        public void spinWheelsOutRight()
-        {
-        intakeWheelDeux.setPosition(-1.0);
-        }
-
-    public void spinWheelsOutLeft()
-    {
-        intakeWheel.setPosition(-1.0);
-    }
-
-    public void spinWheelsInLeft()
-    {
-        intakeWheel.setPosition(1.0);
-    }
+   public void outakeCone(){
+       intakeWheel.setPower(-1.0);
+       intakeWheelDeux.setPower(1.0);
+       mode.sleep(1000);
+       intakeWheel.setPower(0.0);
+       intakeWheelDeux.setPower(0.0);
+   }
 
     public void wind()
     {
@@ -366,22 +345,33 @@ public class HunkOfMetal {
 
     public int getTicks(){return slideMotor.getCurrentPosition();}
 
-    public void placeCone()
+    public void raiseCone()
     {
         slideMotor.setPower(1.0);
-        while(mode.opModeIsActive() && slideMotor.getCurrentPosition() < 100)
-        {
-        }
-        slideMotor.setPower(0.0);
-        intakeWheel.setPosition(1.0);
-        intakeWheelDeux.setPosition(1.0);
-        slideMotor.setPower(-1.0);
-        while(mode.opModeIsActive() && slideMotor.getCurrentPosition() > 0)
+        while(mode.opModeIsActive() && tickYeah(slideMotor) < 1000)
         {
         }
         slideMotor.setPower(0.0);
     }
 
+    public void lowerCone()
+    {
+        slideMotor.setPower(-1.0);
+        while(mode.opModeIsActive() && !mag.isPressed())
+        {
+        }
+        slideMotor.setPower(0.0);
+    }
+    public int tickYeah(DcMotor motor)
+    {
+        int ticks = motor.getCurrentPosition();
+        if(ticks >= 0)
+            return ticks;
+        else
+        {
+            return ticks * -1;
+        }
+    }
 
 }
 

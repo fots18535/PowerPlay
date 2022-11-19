@@ -43,7 +43,7 @@ public class CalibrateSlide extends LinearOpMode {
 
             if(gamepad1.cross) {
                 if (!top) {
-                    slideMotor.setPower(-0.5);
+                    slideMotor.setPower(0.5);
                 }
                 else
                 {
@@ -51,7 +51,7 @@ public class CalibrateSlide extends LinearOpMode {
                 }
             } else if(gamepad1.circle) {
                 if(!bottom) {
-                    slideMotor.setPower(0.5);
+                    slideMotor.setPower(-0.5);
                 }
                 else
                 {

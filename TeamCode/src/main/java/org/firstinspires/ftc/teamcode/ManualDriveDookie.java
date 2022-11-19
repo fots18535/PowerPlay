@@ -17,6 +17,9 @@ public class ManualDriveDookie extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightBack;
     DcMotor rightFront;
+    static final int TALLEST = 3000;
+    static final int MEDIUM = 2000;
+    static final int SHORTY = 1000;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,6 +37,11 @@ public class ManualDriveDookie extends LinearOpMode {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Tells the motor to run until we turn it off
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // Reset the encoder to 0
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         // Stops coasting
@@ -119,7 +127,67 @@ public class ManualDriveDookie extends LinearOpMode {
             slideMotor.setPower(0);
         }
 
-        telemetry.addData("ticks", slideMotor.getCurrentPosition());
+        // press dpad up = raise to top pole height
+
+        if(gamepad1.dpad_up)
+        {
+           if(tickYeah(slideMotor) > TALLEST)
+           {
+               slideMotor.setPower(0.0);
+           }
+           else {
+               slideMotor.setPower(1.0);
+           }
+        }
+
+        if(gamepad1.dpad_down)
+        {
+            if(bottom)
+            {
+                slideMotor.setPower(0.0);
+            }
+            else
+            {
+                slideMotor.setPower(-1.0);
+            }
+        }
+
+        if(gamepad1.dpad_right)
+        {
+            if(tickYeah(slideMotor) > MEDIUM)
+            {
+                slideMotor.setPower(0.0);
+            }
+            else {
+                slideMotor.setPower(1.0);
+            }
+        }
+
+        if(gamepad1.dpad_left)
+        {
+            if(tickYeah(slideMotor) > SHORTY)
+            {
+                slideMotor.setPower(0.0);
+            }
+            else {
+                slideMotor.setPower(1.0);
+            }
+        }
+
+        // press dpad down = lower to ground
+
+        telemetry.addData("ticks", leftFront.getCurrentPosition());
         telemetry.update();
+    }
+
+    public int tickYeah(DcMotor motor)
+    {
+        int ticks = motor.getCurrentPosition();
+        if(ticks >= 0)
+            return ticks;
+        else
+        {
+            return ticks * -1;
+        }
     }
 }
