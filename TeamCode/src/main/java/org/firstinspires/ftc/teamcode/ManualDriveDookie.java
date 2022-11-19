@@ -101,7 +101,7 @@ public class ManualDriveDookie extends LinearOpMode {
             bottom = false;
         }
         //5361
-        if(slideMotor.getCurrentPosition() <= -3000) {
+        if(tickYeah(slideMotor) >= 3000) {
             top = true;
         } else {
             top = false;
@@ -116,32 +116,21 @@ public class ManualDriveDookie extends LinearOpMode {
                 slideMotor.setPower(0.05);
             }
         } else if(gamepad1.circle) {
-            if(!bottom) {
+            if (!bottom) {
                 slideMotor.setPower(0.5);
-            }
-            else
-            {
+            } else {
                 slideMotor.setPower(0.0);
             }
-        } else {
-            slideMotor.setPower(0);
-        }
 
-        // press dpad up = raise to top pole height
+            // press dpad up = raise to top pole height
 
-        if(gamepad1.dpad_up)
-        {
-           if(tickYeah(slideMotor) > TALLEST)
-           {
-               slideMotor.setPower(0.0);
-           }
-           else {
-               slideMotor.setPower(1.0);
-           }
-        }
-
-        if(gamepad1.dpad_down)
-        {
+        } else if(gamepad1.dpad_up) {
+            if (tickYeah(slideMotor) > TALLEST) {
+                slideMotor.setPower(0.0);
+            } else {
+                slideMotor.setPower(1.0);
+            }
+        } else if(gamepad1.dpad_down) {
             if(bottom)
             {
                 slideMotor.setPower(0.0);
@@ -150,10 +139,7 @@ public class ManualDriveDookie extends LinearOpMode {
             {
                 slideMotor.setPower(-1.0);
             }
-        }
-
-        if(gamepad1.dpad_right)
-        {
+        } else if(gamepad1.dpad_right)  {
             if(tickYeah(slideMotor) > MEDIUM)
             {
                 slideMotor.setPower(0.0);
@@ -161,10 +147,7 @@ public class ManualDriveDookie extends LinearOpMode {
             else {
                 slideMotor.setPower(1.0);
             }
-        }
-
-        if(gamepad1.dpad_left)
-        {
+        } else if(gamepad1.dpad_left) {
             if(tickYeah(slideMotor) > SHORTY)
             {
                 slideMotor.setPower(0.0);
@@ -172,6 +155,8 @@ public class ManualDriveDookie extends LinearOpMode {
             else {
                 slideMotor.setPower(1.0);
             }
+        } else {
+            slideMotor.setPower(0);
         }
 
         // press dpad down = lower to ground
