@@ -24,8 +24,9 @@ public class HunkOfMetal {
     TouchSensor mag;
 
 
-    float ticksPerInch = 122.15f;
+    float ticksPerInch = 59.0f;
     float gyroCorrection = -0.04f;
+    float slideTicksPerInch = 68.24f;
 
     public HunkOfMetal(LinearOpMode op) {
         mode = op;
@@ -88,7 +89,7 @@ public class HunkOfMetal {
             rightBack.setPower(rightX - rpower);
             rightFront.setPower(rightX + rpower);
 
-            if (tics > length * ticksPerInch) {
+            if (tics > length * slideTicksPerInch) {
                 break;
             }
             mode.idle();
@@ -347,7 +348,7 @@ public class HunkOfMetal {
 
     public void raiseCone()
     {
-        slideMotor.setPower(1.0);
+        slideMotor.setPower(-1.0);
         while(mode.opModeIsActive() && tickYeah(slideMotor) < 1000)
         {
         }
@@ -356,7 +357,7 @@ public class HunkOfMetal {
 
     public void lowerCone()
     {
-        slideMotor.setPower(-1.0);
+        slideMotor.setPower(1.0);
         while(mode.opModeIsActive() && !mag.isPressed())
         {
         }

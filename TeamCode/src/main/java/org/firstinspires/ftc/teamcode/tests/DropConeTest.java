@@ -16,7 +16,7 @@ public class DropConeTest extends LinearOpMode {
         hunk.intakeCone();
         hunk.raiseCone();
         hunk.outakeCone();
-        hunk.lowerCone();
+        //hunk.lowerCone();
 
     }
 }

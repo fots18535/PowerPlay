@@ -13,7 +13,7 @@ public class DriveForwardThreeFeet extends LinearOpMode {
         hunk.initialize();
         waitForStart();
 
-        hunk.forward(1.0, 36);
+        hunk.forward(0.75, 36);
 
     }
 }

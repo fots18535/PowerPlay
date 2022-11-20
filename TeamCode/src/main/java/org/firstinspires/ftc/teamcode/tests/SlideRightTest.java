@@ -13,7 +13,7 @@ public class SlideRightTest extends LinearOpMode {
         hunk.initialize();
         waitForStart();
 
-        hunk.chaChaRealSmooth(1.0, 24);
+        hunk.chaChaRealSmooth(-1.0, 24);
 
     }
 }

@@ -78,91 +78,83 @@ public class ManualDriveDookie extends LinearOpMode {
 
 
             // put in code from IntakeTest
-            if (gamepad1.a) {
+            if (gamepad1.left_bumper) {
                 intakeWheel.setPower(1.0);
                 intakeWheelDeux.setPower(-1.0);
-            } else if (gamepad1.b) {
+            } else if (gamepad1.right_bumper) {
                 intakeWheel.setPower(-1.0);
                 intakeWheelDeux.setPower(1.0);
             } else {
                 intakeWheel.setPower(0.0);
                 intakeWheelDeux.setPower(0.0);
             }
-        }
 
-        // put in code from CalibrateSlide
-        if(mag.isPressed()) {
-            if(!bottom) {
-                bottom = true;
-                slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-        } else {
-            bottom = false;
-        }
-        //5361
-        if(tickYeah(slideMotor) >= 3000) {
-            top = true;
-        } else {
-            top = false;
-        }
 
-        if(gamepad1.cross) {
-            if (!top) {
-                slideMotor.setPower(-0.5);
-            }
-            else
-            {
-                slideMotor.setPower(0.05);
-            }
-        } else if(gamepad1.circle) {
-            if (!bottom) {
-                slideMotor.setPower(0.5);
+            // put in code from CalibrateSlide
+            if (mag.isPressed()) {
+                if (!bottom) {
+                    bottom = true;
+                    slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
             } else {
-                slideMotor.setPower(0.0);
+                bottom = false;
             }
-
-            // press dpad up = raise to top pole height
-
-        } else if(gamepad1.dpad_up) {
-            if (tickYeah(slideMotor) > TALLEST) {
-                slideMotor.setPower(0.0);
+            //5361
+            if (tickYeah(slideMotor) >= 3000) {
+                top = true;
             } else {
-                slideMotor.setPower(1.0);
+                top = false;
             }
-        } else if(gamepad1.dpad_down) {
-            if(bottom)
-            {
-                slideMotor.setPower(0.0);
+
+            if (gamepad1.cross) {
+                if (!top) {
+                    slideMotor.setPower(-0.5);
+                } else {
+                    slideMotor.setPower(0.05);
+                }
+            } else if (gamepad1.circle) {
+                if (!bottom) {
+                    slideMotor.setPower(0.5);
+                } else {
+                    slideMotor.setPower(0.0);
+                }
+
+                // press dpad up = raise to top pole height
+
+            } else if (gamepad1.dpad_up) {
+                if (tickYeah(slideMotor) > TALLEST) {
+                    slideMotor.setPower(0.0);
+                } else {
+                    slideMotor.setPower(-0.5);
+                }
+            } else if (gamepad1.dpad_down) {
+                if (bottom) {
+                    slideMotor.setPower(0.0);
+                } else {
+                    slideMotor.setPower(0.5);
+                }
+            } else if (gamepad1.dpad_right) {
+                if (tickYeah(slideMotor) > MEDIUM) {
+                    slideMotor.setPower(0.0);
+                } else {
+                    slideMotor.setPower(-0.5);
+                }
+            } else if (gamepad1.dpad_left) {
+                if (tickYeah(slideMotor) > SHORTY) {
+                    slideMotor.setPower(0.0);
+                } else {
+                    slideMotor.setPower(-0.5);
+                }
+            } else {
+                slideMotor.setPower(0);
             }
-            else
-            {
-                slideMotor.setPower(-1.0);
-            }
-        } else if(gamepad1.dpad_right)  {
-            if(tickYeah(slideMotor) > MEDIUM)
-            {
-                slideMotor.setPower(0.0);
-            }
-            else {
-                slideMotor.setPower(1.0);
-            }
-        } else if(gamepad1.dpad_left) {
-            if(tickYeah(slideMotor) > SHORTY)
-            {
-                slideMotor.setPower(0.0);
-            }
-            else {
-                slideMotor.setPower(1.0);
-            }
-        } else {
-            slideMotor.setPower(0);
+
+            // press dpad down = lower to ground
+
+            telemetry.addData("ticks", leftFront.getCurrentPosition());
+            telemetry.update();
         }
-
-        // press dpad down = lower to ground
-
-        telemetry.addData("ticks", leftFront.getCurrentPosition());
-        telemetry.update();
     }
 
     public int tickYeah(DcMotor motor)
