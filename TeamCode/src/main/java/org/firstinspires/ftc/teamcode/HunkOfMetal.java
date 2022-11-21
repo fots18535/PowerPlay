@@ -50,6 +50,7 @@ public class HunkOfMetal {
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         gyro.startGyro();
     }
 
@@ -348,6 +349,8 @@ public class HunkOfMetal {
 
     public void raiseCone()
     {
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideMotor.setPower(-1.0);
         while(mode.opModeIsActive() && tickYeah(slideMotor) < 1000)
         {
@@ -363,6 +366,47 @@ public class HunkOfMetal {
         }
         slideMotor.setPower(0.0);
     }
+
+    public void placeCone() {
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        int height = 3000;
+        long startTime = 0;
+        boolean droppingCone = false;
+        int RELEASING = 1;
+        int RAISING = 2;
+        int DROPPING = 3;
+        int FINISHED = 4;
+        int state = RAISING;
+        while(mode.opModeIsActive() && state != FINISHED) {
+
+            if(state == RAISING && Math.abs(slideMotor.getCurrentPosition()) > height - 100) {
+                state = RELEASING;
+                startTime = System.currentTimeMillis();
+                intakeWheel.setPower(-1.0);
+                intakeWheelDeux.setPower(1.0);
+            }
+
+            if(state == RELEASING && System.currentTimeMillis() - startTime >= 1000) {
+                state = DROPPING;
+                intakeWheel.setPower(0.0);
+                intakeWheelDeux.setPower(0.0);
+                mode.sleep(500);
+                slideMotor.setPower(0.5);
+            }
+
+            if(state == DROPPING && mag.isPressed()) {
+                state = FINISHED;
+                slideMotor.setPower(0.0);
+            }
+
+            if(state == RAISING || state == RELEASING) {
+                slideMotor.setPower(ticRamp(height, slideMotor.getCurrentPosition(), -1.0));
+            }
+        }
+    }
+
     public int tickYeah(DcMotor motor)
     {
         int ticks = motor.getCurrentPosition();
@@ -372,6 +416,18 @@ public class HunkOfMetal {
         {
             return ticks * -1;
         }
+    }
+
+    private double ticRamp(int goal, int cur, double power) {
+        double val = 0.0;
+
+        if(Math.abs(goal) - Math.abs(cur) <= 300) {
+            val = power * (Math.abs(goal) - Math.abs(cur)) / 300;
+        } else {
+            val = power;
+        }
+
+        return val;
     }
 
 }
