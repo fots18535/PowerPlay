@@ -371,38 +371,46 @@ public class HunkOfMetal {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        int height = 3000;
-        long startTime = 0;
-        boolean droppingCone = false;
+        int targetHeight = 3000;
+        long servoStartTime = 0;
+
+        // states
         int RELEASING = 1;
         int RAISING = 2;
         int DROPPING = 3;
         int FINISHED = 4;
+
+        // initial state
         int state = RAISING;
+
+        // This is looping hundreds of times a second
         while(mode.opModeIsActive() && state != FINISHED) {
 
-            if(state == RAISING && Math.abs(slideMotor.getCurrentPosition()) > height - 100) {
-                state = RELEASING;
-                startTime = System.currentTimeMillis();
-                intakeWheel.setPower(-1.0);
-                intakeWheelDeux.setPower(1.0);
-            }
+            // When to transition from RAISING to RELEASING and what to do during transition
+            //if(state == RAISING && ??) {
+            //    state = RELEASING;
+            //    Capture server start time so we can measure how long it has been on
+            //
+            //    Turn on the servos to release the cone
+            //}
 
-            if(state == RELEASING && System.currentTimeMillis() - startTime >= 1000) {
-                state = DROPPING;
-                intakeWheel.setPower(0.0);
-                intakeWheelDeux.setPower(0.0);
-                mode.sleep(500);
-                slideMotor.setPower(0.5);
-            }
+            // When to transition from RELEASING to DROPPING and what to do during transition
+            //if(state == RELEASING && ??) {
+            //    state = DROPPING;
+            //    Turn off the servos
+            //
+            //    Start the motor to drop the slide
+            //}
 
-            if(state == DROPPING && mag.isPressed()) {
-                state = FINISHED;
-                slideMotor.setPower(0.0);
-            }
+            // When to transition from DROPPING to FINISHED and what to do during transition
+            //if(state == DROPPING && ??) {
+            //    state = FINISHED;
+            //    turn off slide motor
+            //}
 
+            // Keep some power going to the slide motor while raising and releasing
             if(state == RAISING || state == RELEASING) {
-                slideMotor.setPower(ticRamp(height, slideMotor.getCurrentPosition(), -1.0));
+                slideMotor.setPower(ticRamp(targetHeight, slideMotor.getCurrentPosition(), -1.0));
             }
         }
     }

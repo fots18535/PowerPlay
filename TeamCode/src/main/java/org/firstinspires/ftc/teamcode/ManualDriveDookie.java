@@ -17,9 +17,9 @@ public class ManualDriveDookie extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightBack;
     DcMotor rightFront;
-    static final int TALLEST = 3000;
-    static final int MEDIUM = 2000;
-    static final int SHORTY = 1000;
+    static final int TALLEST = 5700;
+    static final int MEDIUM = 4000;
+    static final int SHORTY = 2500;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -59,7 +59,7 @@ public class ManualDriveDookie extends LinearOpMode {
             /** Driving Control Section **/
             /*****************************/
 
-            double slowSpeed = 1.0;
+            double slowSpeed = 0.5;
             if (gamepad1.left_bumper) {
                 slowSpeed = 0.5;
             } else {
@@ -78,10 +78,10 @@ public class ManualDriveDookie extends LinearOpMode {
 
 
             // put in code from IntakeTest
-            if (gamepad1.left_bumper) {
+            if (gamepad2.left_bumper) {
                 intakeWheel.setPower(1.0);
                 intakeWheelDeux.setPower(-1.0);
-            } else if (gamepad1.right_bumper) {
+            } else if (gamepad2.right_bumper) {
                 intakeWheel.setPower(-1.0);
                 intakeWheelDeux.setPower(1.0);
             } else {
@@ -101,19 +101,19 @@ public class ManualDriveDookie extends LinearOpMode {
                 bottom = false;
             }
             //5361
-            if (tickYeah(slideMotor) >= 3000) {
-                top = true;
-            } else {
-                top = false;
-            }
+            //if (tickYeah(slideMotor) >= 3000) {
+            //    top = true;
+            //} else {
+            //    top = false;
+            //}
 
-            if (gamepad1.cross) {
+            if (gamepad2.cross) {
                 if (!top) {
                     slideMotor.setPower(-0.5);
                 } else {
                     slideMotor.setPower(0.05);
                 }
-            } else if (gamepad1.circle) {
+            } else if (gamepad2.circle) {
                 if (!bottom) {
                     slideMotor.setPower(0.5);
                 } else {
@@ -122,37 +122,25 @@ public class ManualDriveDookie extends LinearOpMode {
 
                 // press dpad up = raise to top pole height
 
-            } else if (gamepad1.dpad_up) {
-                if (tickYeah(slideMotor) > TALLEST) {
-                    slideMotor.setPower(0.0);
-                } else {
-                    slideMotor.setPower(-0.5);
-                }
-            } else if (gamepad1.dpad_down) {
+            } else if (gamepad2.dpad_up) {
+                slideMotor.setPower(ticRamp(TALLEST,slideMotor.getCurrentPosition(),-1.0));
+            } else if (gamepad2.dpad_down) {
                 if (bottom) {
                     slideMotor.setPower(0.0);
                 } else {
                     slideMotor.setPower(0.5);
                 }
-            } else if (gamepad1.dpad_right) {
-                if (tickYeah(slideMotor) > MEDIUM) {
-                    slideMotor.setPower(0.0);
-                } else {
-                    slideMotor.setPower(-0.5);
-                }
-            } else if (gamepad1.dpad_left) {
-                if (tickYeah(slideMotor) > SHORTY) {
-                    slideMotor.setPower(0.0);
-                } else {
-                    slideMotor.setPower(-0.5);
-                }
+            } else if (gamepad2.dpad_right) {
+                slideMotor.setPower(ticRamp(MEDIUM,slideMotor.getCurrentPosition(),-1.0));
+            } else if (gamepad2.dpad_left) {
+                slideMotor.setPower(ticRamp(SHORTY,slideMotor.getCurrentPosition(),-1.0));
             } else {
                 slideMotor.setPower(0);
             }
 
             // press dpad down = lower to ground
 
-            telemetry.addData("ticks", leftFront.getCurrentPosition());
+            telemetry.addData("ticks", slideMotor.getCurrentPosition());
             telemetry.update();
         }
     }
@@ -166,5 +154,16 @@ public class ManualDriveDookie extends LinearOpMode {
         {
             return ticks * -1;
         }
+    }
+
+    private double ticRamp(int goal, int cur, double power) {
+        double val = 0.0;
+
+        if(Math.abs(goal) - Math.abs(cur) <= 300) {
+            val = power * (Math.abs(goal) - Math.abs(cur)) / 300;
+        } else {
+            val = power;
+        }
+        return val;
     }
 }
