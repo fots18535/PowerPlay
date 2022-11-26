@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+@Autonomous
 public class AutonomousRED extends LinearOpMode {
 
     @Override
@@ -16,6 +18,7 @@ public class AutonomousRED extends LinearOpMode {
         // Read cone thing :)
         String iSee = coneProphet.whatDoISee();
 
+        hunk.forward(0.5,2);
         // Slide right 24 inches
         hunk.chaChaRealSmooth(-1.0,24);
 
@@ -23,40 +26,53 @@ public class AutonomousRED extends LinearOpMode {
         hunk.forward(1.0, 48);
 
         //Side left 12 inches
-        hunk.chaChaRealSmooth(1.0,12);
+        hunk.chaChaRealSmooth(1.0,16);
 
         // Place cone
         // Linear slide up 34 inches
-        hunk.forward(1.0,2);
+        hunk.raiseCone(HunkOfMetal.TALLEST - 200);
+
+        hunk.forwardWithArm(0.5,4.5,HunkOfMetal.TALLEST - 200);
+        sleep(1000);
         // Release cone
-        hunk.forward(-1.0,2);
+        hunk.outakeCone(HunkOfMetal.TALLEST - 200);
+        hunk.forwardWithArm(-1.0,4,HunkOfMetal.TALLEST - 200);
         // Linear slide down 34 inches
+        hunk.lowerCone();
+
+
 
         //Turn left 90 degrees
-        hunk.turnLeft(90,1.0);
+        //hunk.turnLeft(90,1.0);
 
         // Go forward 18 inches
-        hunk.forward(1.0,18);
+        //hunk.forward(1.0,18);
 
         // Pick up cone
+        //hunk.raiseCone(1006);
+        //hunk.forwardWithArm(0.5,8,1006);
 
         // Go back 18 inches
-        hunk.forward(-1.0,18);
+        //hunk.forward(-1.0,18);
 
         // Turn right 90 degrees
-        hunk.turnRight(90,1.0);
+        //hunk.turnRight(90,1.0);
 
         // Place cone
 
+        if(iSee == null)
+        {
+            iSee = "";
+        }
         // Park according to cone
         if(iSee.equals("1 Bolt")){
-            hunk.chaChaRealSmooth(1.0,36);
+            hunk.chaChaRealSmooth(1.0,35);
         }
         else if(iSee.equals("2 Bulb")){
-            hunk.chaChaRealSmooth(1.0,12);
+            hunk.chaChaRealSmooth(1.0,11);
         }
         else{
-            hunk.chaChaRealSmooth(-1.0,12);
+            hunk.chaChaRealSmooth(-1.0,11);
         }
 
     }

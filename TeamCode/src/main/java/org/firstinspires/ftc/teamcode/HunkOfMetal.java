@@ -22,7 +22,9 @@ public class HunkOfMetal {
     CRServo intakeWheelDeux;
     CRServo intakeWheel;
     TouchSensor mag;
-
+    public static final int TALLEST = 5700;
+    public static final int MEDIUM = 4000;
+    public static final int SHORTY = 2500;
 
     float ticksPerInch = 59.0f;
     float gyroCorrection = -0.04f;
@@ -250,68 +252,6 @@ public class HunkOfMetal {
     final int GROUND_MIN = -100;
     final int GROUND_MAX = 100;
 
-    public void raiseArm(int level) {
-        // if magnet sensor is active reset the arm encoder
-        if (maggot.isPressed()) {
-            gandalfStaff.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            gandalfStaff.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-
-        int where = gandalfStaff.getCurrentPosition();
-
-        // ground level stuff
-        if (level == 0) {
-            if (where > 100) {
-                gandalfStaff.setPower(0.1);
-            } else {
-                gandalfStaff.setPower(0);
-            }
-            return;
-        }
-
-        // Depending on level set min and max variables and then use them
-        // in the below loop
-        int min = 0;
-        int max = 0;
-        if (level == 1) {
-            min = BOTTOM_MIN;
-            max = BOTTOM_MAX;
-        } else if (level == 2) {
-            min = MIDDLE_MIN;
-            max = MIDDLE_MAX;
-        } else if (level == 3) {
-            min = TOP_MIN;
-            max = TOP_MAX;
-        }else if (level==4){
-            min = Cap_Min;
-            max = Cap_Max;
-        }
-
-        while (where < min || where > max) {
-            where = gandalfStaff.getCurrentPosition();
-
-            // if current position > top_max then set power to turn backwards
-            // if current position < top_min then set power to turn forwards
-            if (where < min - 40) {
-                gandalfStaff.setPower(-0.5);
-            } else if (where < min - 30) {
-                gandalfStaff.setPower(-0.4);
-            } else if (where < min - 20) {
-                gandalfStaff.setPower(-0.4);
-            } else if (where < min - 10) {
-                gandalfStaff.setPower(-0.3);
-            } else if (where > max + 50) {
-                gandalfStaff.setPower(0.2);
-            } else {
-                gandalfStaff.setPower(-0.2);
-            }
-
-        }
-    }
-
-    // Code for spinning the wheels
-    // Press the button once or hold the button down?
-
    public void intakeCone(){
        intakeWheel.setPower(1.0);
        intakeWheelDeux.setPower(-1.0);
@@ -320,10 +260,14 @@ public class HunkOfMetal {
        intakeWheelDeux.setPower(0.0);
    }
 
-   public void outakeCone(){
+   public void outakeCone(int ticHeight){
        intakeWheel.setPower(-1.0);
        intakeWheelDeux.setPower(1.0);
-       mode.sleep(1000);
+       long startTime = System.currentTimeMillis();
+       while(mode.opModeIsActive() && System.currentTimeMillis() - startTime < 1000)
+       {
+           slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
+       }
        intakeWheel.setPower(0.0);
        intakeWheelDeux.setPower(0.0);
    }
@@ -347,15 +291,22 @@ public class HunkOfMetal {
 
     public int getTicks(){return slideMotor.getCurrentPosition();}
 
-    public void raiseCone()
+    public void raiseCone(int ticHeight)
     {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slideMotor.setPower(-1.0);
-        while(mode.opModeIsActive() && tickYeah(slideMotor) < 1000)
+        while(mode.opModeIsActive() && tickYeah(slideMotor) < ticHeight - 100)
         {
+            slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
         }
-        slideMotor.setPower(0.0);
+    }
+
+    public void adjustCone(int ticHeight)
+    {
+        while(mode.opModeIsActive() && tickYeah(slideMotor) > ticHeight)
+        {
+            slideMotor.setPower(0.5);
+        }
     }
 
     public void lowerCone()
@@ -365,54 +316,6 @@ public class HunkOfMetal {
         {
         }
         slideMotor.setPower(0.0);
-    }
-
-    public void placeCone() {
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        int targetHeight = 3000;
-        long servoStartTime = 0;
-
-        // states
-        int RELEASING = 1;
-        int RAISING = 2;
-        int DROPPING = 3;
-        int FINISHED = 4;
-
-        // initial state
-        int state = RAISING;
-
-        // This is looping hundreds of times a second
-        while(mode.opModeIsActive() && state != FINISHED) {
-
-            // When to transition from RAISING to RELEASING and what to do during transition
-            //if(state == RAISING && ??) {
-            //    state = RELEASING;
-            //    Capture server start time so we can measure how long it has been on
-            //
-            //    Turn on the servos to release the cone
-            //}
-
-            // When to transition from RELEASING to DROPPING and what to do during transition
-            //if(state == RELEASING && ??) {
-            //    state = DROPPING;
-            //    Turn off the servos
-            //
-            //    Start the motor to drop the slide
-            //}
-
-            // When to transition from DROPPING to FINISHED and what to do during transition
-            //if(state == DROPPING && ??) {
-            //    state = FINISHED;
-            //    turn off slide motor
-            //}
-
-            // Keep some power going to the slide motor while raising and releasing
-            if(state == RAISING || state == RELEASING) {
-                slideMotor.setPower(ticRamp(targetHeight, slideMotor.getCurrentPosition(), -1.0));
-            }
-        }
     }
 
     public int tickYeah(DcMotor motor)
@@ -437,7 +340,47 @@ public class HunkOfMetal {
 
         return val;
     }
+    public void forwardWithArm(double power, double length, int ticHeight) {
+        // Reset the encoder to 0
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        gyro.reset();
+        long startTime = System.currentTimeMillis();
 
+        // Go forward until tics reached
+        while (mode.opModeIsActive()) {
+
+            //absolute value of getCurrentPosition()
+            int tics = leftFront.getCurrentPosition();
+            if (tics < 0) {
+                tics = tics * -1;
+            }
+            //telemetry.addData("debug tics", tics);
+            //telemetry.addData("debug compare to ", length*ticksPerInch);
+
+            if (tics > length * ticksPerInch) {
+                break;
+            }
+
+            // Get the angle and adjust the power to correct
+            double rpower = ramp(power, startTime);
+            float rightX = gyroCorrection * (float) gyro.getAngle();
+            leftBack.setPower(rightX - rpower);
+            leftFront.setPower(rightX - rpower);
+            rightBack.setPower(rightX + rpower);
+            rightFront.setPower(rightX + rpower);
+
+            slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
+
+            mode.idle();
+        }
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
+    }
 }
 
 
