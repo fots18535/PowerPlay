@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class AutonomousRED extends LinearOpMode {
+public class AutonomousRedLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,19 +20,19 @@ public class AutonomousRED extends LinearOpMode {
 
         hunk.forward(0.5,2);
         // Slide right 24 inches
-        hunk.chaChaRealSmooth(-1.0,24);
+        hunk.chaChaRealSmooth(-1.0,19);
 
         // Go forward 48 inches
-        hunk.forward(1.0, 48);
+        hunk.forward(1.0, 47);
 
         //Side left 12 inches
-        hunk.chaChaRealSmooth(1.0,16);
+        hunk.chaChaRealSmooth(1.0,14);
 
         // Place cone
         // Linear slide up 34 inches
         hunk.raiseCone(HunkOfMetal.TALLEST - 200);
 
-        hunk.forwardWithArm(0.5,4.5,HunkOfMetal.TALLEST - 200);
+        hunk.forwardWithArm(0.5,3.5,HunkOfMetal.TALLEST - 200);
         sleep(1000);
         // Release cone
         hunk.outakeCone(HunkOfMetal.TALLEST - 200);
@@ -60,7 +60,6 @@ public class AutonomousRED extends LinearOpMode {
 
         // Place cone
 
-        if(iSee == null)
         {
             iSee = "";
         }

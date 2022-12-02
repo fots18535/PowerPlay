@@ -69,7 +69,7 @@ public class Gyro2 {
 
     public void startGyro(){
         // The imu complains if you try to initialize it twice so check if it is already initialized
-        if(!gyro.isGyroCalibrated()) {
+        //if(!gyro.isGyroCalibrated()) {
 
             // Set the parameters to initialize the imu
             // This was referenced from http://stemrobotics.cs.pdx.edu/node/7265
@@ -94,7 +94,7 @@ public class Gyro2 {
 
             opMode.telemetry.addData("Gyro Mode:", "ready");
             opMode.telemetry.update();
-        }
+        //}
 
         // send a message to the phone about the calibration status
         //opMode.telemetry.addData("Gyro Status", gyro.getCalibrationStatus().toString());
