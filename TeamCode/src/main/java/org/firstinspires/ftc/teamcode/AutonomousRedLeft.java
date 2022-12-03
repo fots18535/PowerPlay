@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
 public class AutonomousRedLeft extends LinearOpMode {
@@ -16,7 +17,36 @@ public class AutonomousRedLeft extends LinearOpMode {
         waitForStart();
 
         // Read cone thing :)
-        String iSee = coneProphet.whatDoISee();
+        double bulbCount = 0.0;
+        double panelCount = 0.0;
+        double boltCount = 0.0;
+        int i = 0;
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(i < 100 && timer.seconds() < 7)
+        {
+            String seen = coneProphet.whatDoISee();
+
+            if(seen != null)
+            {
+                i++;
+
+                if(seen.equals("1 Bolt"))
+                {
+                    boltCount++;
+                }
+                else if(seen.equals("2 Bulb"))
+                {
+                    bulbCount++;
+                }
+                else if(seen.equals("3 Panel"))
+                {
+                    panelCount++;
+                }
+            }
+
+        }
 
         hunk.forward(0.5,2);
         // Slide right 24 inches
@@ -60,14 +90,11 @@ public class AutonomousRedLeft extends LinearOpMode {
 
         // Place cone
 
-        {
-            iSee = "";
-        }
         // Park according to cone
-        if(iSee.equals("1 Bolt")){
+        if(boltCount > bulbCount && boltCount > panelCount){
             hunk.chaChaRealSmooth(1.0,35);
         }
-        else if(iSee.equals("2 Bulb")){
+        else if(bulbCount > boltCount && bulbCount > panelCount){
             hunk.chaChaRealSmooth(1.0,11);
         }
         else{

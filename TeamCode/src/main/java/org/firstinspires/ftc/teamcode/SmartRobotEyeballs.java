@@ -63,7 +63,7 @@ public class SmartRobotEyeballs {
      * Here we assume it's an Asset.    Also see method initTfod() below .
      */
     private static final String TFOD_MODEL_ASSET = "PowerPlay.tflite";
-    //private static final String TFOD_MODEL_ASSET = "redcone.tflite";
+    //private static final String TFOD_MODEL_ASSET = "conesleeve.tflite";
     //private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
 
     private static final String[] LABELS = {
@@ -137,18 +137,28 @@ public class SmartRobotEyeballs {
                 } else {
                     // step through the list of recognitions and display image position/size information for each one
                     // Note: "Image number" refers to the randomized image orientation/number
+
+                    String bestRecog = null;
+                    double bestConf = 0.0;
                     for (Recognition recognition : updatedRecognitions) {
                         double col = (recognition.getLeft() + recognition.getRight()) / 2;
                         double row = (recognition.getTop() + recognition.getBottom()) / 2;
                         double width = Math.abs(recognition.getRight() - recognition.getLeft());
                         double height = Math.abs(recognition.getTop() - recognition.getBottom());
 
-                        poo = recognition.getLabel();
+                        if(recognition.getConfidence() > bestConf)
+                        {
+                            bestConf = recognition.getConfidence();
+                            bestRecog = recognition.getLabel();
+                        }
+
                         // op.telemetry.addData("", " ");
                         // op.telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
                         // op.telemetry.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
                         // op.telemetry.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
                     }
+
+                    poo = bestRecog;
                 }
                 // op.telemetry.update();
             }

@@ -241,16 +241,16 @@ public class HunkOfMetal {
 
     // Raise arm to 3 different positions
     // variables declared, not the actual values bruh
-    final int TOP_MIN = 864;
-    final int TOP_MAX = 1000;
-    final int Cap_Max = 800;
-    final int Cap_Min = 700;
-    final int MIDDLE_MIN = 575;
-    final int MIDDLE_MAX = 625;
-    final int BOTTOM_MIN = 246;
-    final int BOTTOM_MAX = 320;
-    final int GROUND_MIN = -100;
-    final int GROUND_MAX = 100;
+    //final int TOP_MIN = 864;
+    //final int TOP_MAX = 1000;
+    //final int Cap_Max = 800;
+    //final int Cap_Min = 700;
+    //final int MIDDLE_MIN = 575;
+    //final int MIDDLE_MAX = 625;
+    //final int BOTTOM_MIN = 246;
+    //final int BOTTOM_MAX = 320;
+    //final int GROUND_MIN = -100;
+    //final int GROUND_MAX = 100;
 
    public void intakeCone(){
        intakeWheel.setPower(1.0);

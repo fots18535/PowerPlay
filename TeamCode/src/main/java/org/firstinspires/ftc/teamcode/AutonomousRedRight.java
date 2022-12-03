@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.Timer;
 
 @Autonomous
 public class AutonomousRedRight extends LinearOpMode {
@@ -16,23 +19,52 @@ public class AutonomousRedRight extends LinearOpMode {
         waitForStart();
 
         // Read cone thing :)
-        String iSee = coneProphet.whatDoISee();
+        double bulbCount = 0.0;
+        double panelCount = 0.0;
+        double boltCount = 0.0;
+        int i = 0;
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+        while(i < 100 && timer.seconds() < 7)
+        {
+            String seen = coneProphet.whatDoISee();
+
+            if(seen != null)
+            {
+                i++;
+
+                if(seen.equals("1 Bolt"))
+                {
+                    boltCount++;
+                }
+                else if(seen.equals("2 Bulb"))
+                {
+                    bulbCount++;
+                }
+                else if(seen.equals("3 Panel"))
+                {
+                    panelCount++;
+                }
+            }
+
+        }
 
         hunk.forward(0.5,2);
         // Slide left 24 inches
         hunk.chaChaRealSmooth(1.0,24.4);
 
         // Go forward 48 inches
-        hunk.forward(1.0, 47);
+        hunk.forward(1.0, 46);
 
         //Side right 12 inches
-        hunk.chaChaRealSmooth(-1.0,8);
+        hunk.chaChaRealSmooth(-1.0,12);
 
         // Place cone
         // Linear slide up 34 inches
         hunk.raiseCone(HunkOfMetal.TALLEST - 200);
 
-        hunk.forwardWithArm(0.5,9,HunkOfMetal.TALLEST - 200);
+        hunk.forwardWithArm(0.5,4,HunkOfMetal.TALLEST - 200);
         sleep(1000);
         // Release cone
         hunk.outakeCone(HunkOfMetal.TALLEST - 200);
@@ -61,20 +93,17 @@ public class AutonomousRedRight extends LinearOpMode {
 
         // Place cone
 
-        {
-            iSee = "";
-        }
+
         // Park according to cone
-        if(iSee.equals("1 Bolt")){
-            hunk.chaChaRealSmooth(1.0,35);
-        }
-        else if(iSee.equals("2 Bulb")){
+        if(boltCount > bulbCount && boltCount > panelCount){
             hunk.chaChaRealSmooth(1.0,11);
         }
-        else{
+        else if(bulbCount > boltCount && bulbCount > panelCount){
             hunk.chaChaRealSmooth(-1.0,11);
         }
-
+        else{
+            hunk.chaChaRealSmooth(-1.0,35);
+        }
     }
 }
 

@@ -53,6 +53,8 @@ public class ManualDriveDookie extends LinearOpMode {
         waitForStart();
         boolean bottom = false;
         boolean top = false;
+        int conestack = 4;
+        boolean squarepressedfirsttime = true;
         while (opModeIsActive()) {
 
             /*****************************/
@@ -107,13 +109,14 @@ public class ManualDriveDookie extends LinearOpMode {
             //    top = false;
             //}
 
-            if (gamepad2.cross) {
+            if (gamepad2.circle) {
                 if (!top) {
                     slideMotor.setPower(-0.5);
                 } else {
                     slideMotor.setPower(0.05);
                 }
-            } else if (gamepad2.circle) {
+            } else if (gamepad2.cross) {
+
                 if (!bottom) {
                     slideMotor.setPower(0.5);
                 } else {
@@ -140,10 +143,29 @@ public class ManualDriveDookie extends LinearOpMode {
 
             // press dpad down = lower to ground
 
+           if(gamepad2.triangle){
+               slideMotor.setPower(ticRamp(-240*conestack,slideMotor.getCurrentPosition(),-1.0));
+           }
+
+            if(gamepad2.square){
+                if (squarepressedfirsttime) {
+                    squarepressedfirsttime=false;
+                    conestack--;
+                    if (conestack == 0){
+                        conestack=4;
+                    }
+                }
+            } else {
+                squarepressedfirsttime = true;
+            }
+
+
             telemetry.addData("ticks", slideMotor.getCurrentPosition());
             telemetry.update();
         }
     }
+
+
 
     public int tickYeah(DcMotor motor)
     {
