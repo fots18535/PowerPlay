@@ -65,7 +65,7 @@ public class ManualDriveDookie extends LinearOpMode {
             if (gamepad1.left_bumper) {
                 slowSpeed = 0.5;
             } else {
-                slowSpeed = 1.0;
+                slowSpeed = 0.8;
             }
             //Get the input from the gamepad controller
             double leftX = gamepad1.left_stick_x * slowSpeed;

@@ -52,23 +52,23 @@ public class AutonomousRedRight extends LinearOpMode {
 
         hunk.forward(0.5,2);
         // Slide left 24 inches
-        hunk.chaChaRealSmooth(1.0,24.4);
+        hunk.chaChaRealSmooth(0.5,28.65);
 
         // Go forward 48 inches
-        hunk.forward(1.0, 46);
+        hunk.forward(0.5, 50);
 
         //Side right 12 inches
-        hunk.chaChaRealSmooth(-1.0,12);
+        hunk.chaChaRealSmooth(-0.5,11);
 
         // Place cone
         // Linear slide up 34 inches
         hunk.raiseCone(HunkOfMetal.TALLEST - 200);
 
-        hunk.forwardWithArm(0.5,4,HunkOfMetal.TALLEST - 200);
+        hunk.forwardWithArm(0.5,2,HunkOfMetal.TALLEST - 200);
         sleep(1000);
         // Release cone
         hunk.outakeCone(HunkOfMetal.TALLEST - 200);
-        hunk.forwardWithArm(-1.0,4,HunkOfMetal.TALLEST - 200);
+        hunk.forwardWithArm(-0.5,3,HunkOfMetal.TALLEST - 200);
         // Linear slide down 34 inches
         hunk.lowerCone();
 
@@ -96,13 +96,13 @@ public class AutonomousRedRight extends LinearOpMode {
 
         // Park according to cone
         if(boltCount > bulbCount && boltCount > panelCount){
-            hunk.chaChaRealSmooth(1.0,11);
+            hunk.chaChaRealSmooth(0.5,11);
         }
         else if(bulbCount > boltCount && bulbCount > panelCount){
-            hunk.chaChaRealSmooth(-1.0,11);
+            hunk.chaChaRealSmooth(-0.5,11);
         }
         else{
-            hunk.chaChaRealSmooth(-1.0,35);
+            hunk.chaChaRealSmooth(-0.5,33);
         }
     }
 }
