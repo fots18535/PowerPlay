@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.checkerframework.checker.units.qual.min;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp
 public class ManualDriveDookie extends LinearOpMode {
@@ -32,6 +34,8 @@ public class ManualDriveDookie extends LinearOpMode {
         DcMotor slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         TouchSensor mag = hardwareMap.get(TouchSensor.class, "magSense");
+        DistanceSensor lazerLeft = hardwareMap.get(DistanceSensor.class, "lazerLeft");
+        DistanceSensor lazerRight = hardwareMap.get(DistanceSensor.class, "lazerRight");
 
         // Reset the encoder to 0
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,6 +53,9 @@ public class ManualDriveDookie extends LinearOpMode {
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        double power = 0;
+        double correction = 0;
 
         waitForStart();
         boolean bottom = false;
@@ -73,10 +80,10 @@ public class ManualDriveDookie extends LinearOpMode {
             double rightX = -gamepad1.right_stick_x * slowSpeed;
             double rightY = gamepad1.right_stick_y * slowSpeed;
 
-            leftBack.setPower(rightX + rightY + leftX);
-            leftFront.setPower(rightX + rightY - leftX);
-            rightBack.setPower(rightX - rightY + leftX);
-            rightFront.setPower(rightX - rightY - leftX);
+            leftBack.setPower(correction - power + rightX + rightY + leftX);
+            leftFront.setPower(correction - power + rightX + rightY - leftX);
+            rightBack.setPower(correction + power + rightX - rightY + leftX);
+            rightFront.setPower(correction + power + rightX - rightY - leftX);
 
 
             // put in code from IntakeTest
@@ -126,7 +133,27 @@ public class ManualDriveDookie extends LinearOpMode {
                 // press dpad up = raise to top pole height
 
             } else if (gamepad2.dpad_up) {
-                slideMotor.setPower(ticRamp(TALLEST,slideMotor.getCurrentPosition(),-1.0));
+                slideMotor.setPower(ticRamp(TALLEST, slideMotor.getCurrentPosition(), -1.0));
+
+                if(slideMotor.getCurrentPosition()>=TALLEST) {
+                    double a = lazerLeft.getDistance(DistanceUnit.INCH);
+                    double b = lazerRight.getDistance(DistanceUnit.INCH);
+                    if (b <= 5.0 && a <= 5.0) {
+                        power = 0;
+                        correction = 0;
+                    } else if (b > 5.0 && b < 16.0 && a > 16.0) {
+                        telemetry.addData("lazerLeft", a);
+                        telemetry.addData("lazerRight", b);
+                        power = .1;
+                        correction = -1 * (((b - 5) * 0.2) / 11 + 0.05);
+                    } else if (a > 5.0 && a < 16.0 && b > 16.0) {
+                        power = .1;
+                        correction = ((a - 5) * 0.2) / 11 + 0.05;
+                    } else {
+                    }
+                    telemetry.update();
+                }
+
             } else if (gamepad2.dpad_down) {
                 if (bottom) {
                     slideMotor.setPower(0.0);
