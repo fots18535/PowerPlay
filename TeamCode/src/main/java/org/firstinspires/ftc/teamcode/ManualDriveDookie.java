@@ -62,13 +62,14 @@ public class ManualDriveDookie extends LinearOpMode {
         boolean top = false;
         int conestack = 4;
         boolean squarepressedfirsttime = true;
+        boolean autopos = false;
         while (opModeIsActive()) {
 
             /*****************************/
             /** Driving Control Section **/
             /*****************************/
 
-            double slowSpeed = 0.5;
+            double slowSpeed = 0.4;
             if (gamepad1.left_bumper) {
                 slowSpeed = 0.5;
             } else {
@@ -80,11 +81,43 @@ public class ManualDriveDookie extends LinearOpMode {
             double rightX = -gamepad1.right_stick_x * slowSpeed;
             double rightY = gamepad1.right_stick_y * slowSpeed;
 
-            leftBack.setPower(correction - power + rightX + rightY + leftX);
-            leftFront.setPower(correction - power + rightX + rightY - leftX);
-            rightBack.setPower(correction + power + rightX - rightY + leftX);
-            rightFront.setPower(correction + power + rightX - rightY - leftX);
+            if (gamepad1.a){
+                double a = lazerLeft.getDistance(DistanceUnit.INCH);
+                double b = lazerRight.getDistance(DistanceUnit.INCH);
+                double correctionValue = 0;
+                boolean givePower = true;
 
+                if(a>b && b>6.0 && b<16.0) {
+
+                    correctionValue = -1*(((b-5)*0.2)/11+0.05);
+                    givePower = true;
+                }
+
+                else if (b > a && a > 6.0 && a < 16.0) {
+                    correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
+                    givePower = true;
+
+                }else if (a < 6.0 || b < 6.0){
+                    givePower = false;
+                }
+
+                if(givePower) {
+                    rightY = -0.4;
+
+                    leftBack.setPower((correctionValue + rightX) + rightY + leftX);
+                    leftFront.setPower((correctionValue + rightX) + rightY - leftX);
+                    rightBack.setPower((correctionValue + rightX) - rightY + leftX);
+                    rightFront.setPower((correctionValue + rightX) - rightY - leftX);
+                } else {
+                    stopMotors();
+                }
+            }else {
+
+                leftBack.setPower(rightX + rightY + leftX);
+                leftFront.setPower(rightX + rightY - leftX);
+                rightBack.setPower(rightX - rightY + leftX);
+                rightFront.setPower(rightX - rightY - leftX);
+            }
 
             // put in code from IntakeTest
             if (gamepad2.left_bumper) {
@@ -192,7 +225,12 @@ public class ManualDriveDookie extends LinearOpMode {
         }
     }
 
-
+    private void stopMotors() {
+        leftBack.setPower(0.0);
+        leftFront.setPower(0.0);
+        rightBack.setPower(0.0);
+        rightFront.setPower(0.0);
+    }
 
     public int tickYeah(DcMotor motor)
     {

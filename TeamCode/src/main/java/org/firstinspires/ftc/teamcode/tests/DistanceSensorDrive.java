@@ -40,16 +40,19 @@ public class DistanceSensorDrive extends LinearOpMode {
             telemetry.addData("lazerLeft", "%.2f", a);
             telemetry.addData("lazerRight", "%.2f", b);
 
-            if(b > 5.0 && b < 16.0 && a > 16.0){
+          //  if(b > 5.0 && b <  16.0 && a > 16.0){
+                if(a>b && b>6.0 && b<16.0) {
+
                 correctionValue = -1*(((b-5)*0.2)/11+0.05);
                 givePower = true;
             }
-            else if(a > 5.0 && a < 16.0 && b > 16.0)
-            {
-                correctionValue = ((a-5)*0.2)/11+0.05;
-                givePower = true;
+           // else if(a > 5.0 && a < 16.0 && b > 16.0)
+            else if (b > a && a > 6.0 && a < 16.0) {
+                    correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
+                    givePower = true;
 
-            } else if( a < 5.0 && b < 5.0 ){
+                    // } else if( a < 5.0 && b < 5.0 ){
+                }else if (a < 6.0 || b < 6.0){
                 givePower = false;
             }
 
@@ -67,10 +70,12 @@ public class DistanceSensorDrive extends LinearOpMode {
                         correctionValue + rightX - rightY + leftX,
                         correctionValue + rightX - rightY - leftX);
 
-                leftBack.setPower(correctionValue + rightX + rightY + leftX);
-                leftFront.setPower(correctionValue + rightX + rightY - leftX);
-                rightBack.setPower(correctionValue + rightX - rightY + leftX);
-                rightFront.setPower(correctionValue + rightX - rightY - leftX);
+            rightY = -0.4;
+
+                leftBack.setPower((correctionValue + rightX) + rightY + leftX);
+                leftFront.setPower((correctionValue + rightX) + rightY - leftX);
+                rightBack.setPower((correctionValue + rightX) - rightY + leftX);
+                rightFront.setPower((correctionValue + rightX) - rightY - leftX);
             } else {
                 stopMotors();
 
