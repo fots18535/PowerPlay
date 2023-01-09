@@ -5,8 +5,11 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class HunkOfMetal {
     DcMotor leftBack;
@@ -22,6 +25,8 @@ public class HunkOfMetal {
     CRServo intakeWheelDeux;
     CRServo intakeWheel;
     TouchSensor mag;
+    DistanceSensor lazerLeft;
+    DistanceSensor lazerRight;
     public static final int TALLEST = 5700;
     public static final int MEDIUM = 4000;
     public static final int SHORTY = 2500;
@@ -47,6 +52,8 @@ public class HunkOfMetal {
         intakeWheelDeux = mode.hardwareMap.get(CRServo.class, "rightIntake");
         slideMotor = mode.hardwareMap.get(DcMotor.class, "slideMotor");
         mag = mode.hardwareMap.get(TouchSensor.class, "magSense");
+        lazerLeft = mode.hardwareMap.get(DistanceSensor.class, "lazerLeft");
+        lazerRight = mode.hardwareMap.get(DistanceSensor.class, "lazerRight");
 
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -145,6 +152,7 @@ public class HunkOfMetal {
         rightBack.setPower(0);
         rightFront.setPower(0);
     }
+
     public void forwardNoGyro(double power, double length) {
         // Reset the encoder to 0
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -171,8 +179,8 @@ public class HunkOfMetal {
 
             // Get the angle and adjust the power to correct
             double rpower = ramp(power, startTime);
-            leftBack.setPower( - rpower);
-            leftFront.setPower( - rpower);
+            leftBack.setPower(-rpower);
+            leftFront.setPower(-rpower);
             rightBack.setPower(rpower);
             rightFront.setPower(rpower);
 
@@ -252,79 +260,69 @@ public class HunkOfMetal {
     //final int GROUND_MIN = -100;
     //final int GROUND_MAX = 100;
 
-   public void intakeCone(){
-       intakeWheel.setPower(1.0);
-       intakeWheelDeux.setPower(-1.0);
-       mode.sleep(1000);
-       intakeWheel.setPower(0.0);
-       intakeWheelDeux.setPower(0.0);
-   }
+    public void intakeCone() {
+        intakeWheel.setPower(1.0);
+        intakeWheelDeux.setPower(-1.0);
+        mode.sleep(1000);
+        intakeWheel.setPower(0.0);
+        intakeWheelDeux.setPower(0.0);
+    }
 
-   public void outakeCone(int ticHeight){
-       intakeWheel.setPower(-1.0);
-       intakeWheelDeux.setPower(1.0);
-       long startTime = System.currentTimeMillis();
-       while(mode.opModeIsActive() && System.currentTimeMillis() - startTime < 1000)
-       {
-           slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
-       }
-       intakeWheel.setPower(0.0);
-       intakeWheelDeux.setPower(0.0);
-   }
+    public void outakeCone(int ticHeight) {
+        intakeWheel.setPower(-1.0);
+        intakeWheelDeux.setPower(1.0);
+        long startTime = System.currentTimeMillis();
+        while (mode.opModeIsActive() && System.currentTimeMillis() - startTime < 1000) {
+            slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
+        }
+        intakeWheel.setPower(0.0);
+        intakeWheelDeux.setPower(0.0);
+    }
 
-    public void wind()
-    {
+    public void wind() {
         slideMotor.setPower(0.5);
     }
     // Raise cone to certain height based encoder ticks
 
-    public void unwind()
-    {
+    public void unwind() {
         slideMotor.setPower(-0.5);
     }
     // Lower cone until sensor triggers
 
-    public void stopWind()
-    {
+    public void stopWind() {
         slideMotor.setPower(0.0);
     }
 
-    public int getTicks(){return slideMotor.getCurrentPosition();}
+    public int getTicks() {
+        return slideMotor.getCurrentPosition();
+    }
 
-    public void raiseCone(int ticHeight)
-    {
+    public void raiseCone(int ticHeight) {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        while(mode.opModeIsActive() && tickYeah(slideMotor) < ticHeight - 100)
-        {
+        while (mode.opModeIsActive() && tickYeah(slideMotor) < ticHeight - 100) {
             slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
         }
     }
 
-    public void adjustCone(int ticHeight)
-    {
-        while(mode.opModeIsActive() && tickYeah(slideMotor) > ticHeight)
-        {
+    public void adjustCone(int ticHeight) {
+        while (mode.opModeIsActive() && tickYeah(slideMotor) > ticHeight) {
             slideMotor.setPower(0.5);
         }
     }
 
-    public void lowerCone()
-    {
+    public void lowerCone() {
         slideMotor.setPower(1.0);
-        while(mode.opModeIsActive() && !mag.isPressed())
-        {
+        while (mode.opModeIsActive() && !mag.isPressed()) {
         }
         slideMotor.setPower(0.0);
     }
 
-    public int tickYeah(DcMotor motor)
-    {
+    public int tickYeah(DcMotor motor) {
         int ticks = motor.getCurrentPosition();
-        if(ticks >= 0)
+        if (ticks >= 0)
             return ticks;
-        else
-        {
+        else {
             return ticks * -1;
         }
     }
@@ -332,7 +330,7 @@ public class HunkOfMetal {
     private double ticRamp(int goal, int cur, double power) {
         double val = 0.0;
 
-        if(Math.abs(goal) - Math.abs(cur) <= 300) {
+        if (Math.abs(goal) - Math.abs(cur) <= 300) {
             val = power * (Math.abs(goal) - Math.abs(cur)) / 300;
         } else {
             val = power;
@@ -340,6 +338,7 @@ public class HunkOfMetal {
 
         return val;
     }
+
     public void forwardWithArm(double power, double length, int ticHeight) {
         // Reset the encoder to 0
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -380,6 +379,53 @@ public class HunkOfMetal {
         leftFront.setPower(0);
         rightBack.setPower(0);
         rightFront.setPower(0);
+    }
+
+    public void autoAlign(int ticHeight) {
+        double rightX = 0.0;
+        double leftX = 0.0;
+        double rightY = 0.0;
+        double leftY = 0.0;
+
+        while (mode.opModeIsActive()) {
+            double a = lazerLeft.getDistance(DistanceUnit.INCH);
+            double b = lazerRight.getDistance(DistanceUnit.INCH);
+            double correctionValue = 0;
+            boolean givePower = true;
+
+            if (a > b && b > 7.0 && b < 16.0) {
+
+                correctionValue = -1 * (((b - 5) * 0.2) / 11 + 0.05);
+                givePower = true;
+            } else if (b > a && a > 7.0 && a < 16.0) {
+                correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
+                givePower = true;
+
+            } else if (a < 7.0 || b < 7.0) {
+                givePower = false;
+            }
+
+            slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
+
+            if (givePower) {
+                rightY = -0.3;
+
+                leftBack.setPower((correctionValue + rightX) + rightY + leftX);
+                leftFront.setPower((correctionValue + rightX) + rightY - leftX);
+                rightBack.setPower((correctionValue + rightX) - rightY + leftX);
+                rightFront.setPower((correctionValue + rightX) - rightY - leftX);
+            } else {
+                stopMotors();
+                break;
+            }
+        }
+    }
+
+    private void stopMotors() {
+        leftBack.setPower(0.0);
+        leftFront.setPower(0.0);
+        rightBack.setPower(0.0);
+        rightFront.setPower(0.0);
     }
 }
 

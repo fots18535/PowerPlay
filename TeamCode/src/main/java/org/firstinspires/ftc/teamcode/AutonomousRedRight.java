@@ -66,6 +66,9 @@ public class AutonomousRedRight extends LinearOpMode {
 
         hunk.forwardWithArm(0.5,2,HunkOfMetal.TALLEST - 200);
         sleep(1000);
+
+        hunk.autoAlign(HunkOfMetal.TALLEST - 200);
+        
         // Release cone
         hunk.outakeCone(HunkOfMetal.TALLEST - 200);
         hunk.forwardWithArm(-0.5,3,HunkOfMetal.TALLEST - 200);

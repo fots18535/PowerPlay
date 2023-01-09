@@ -87,22 +87,22 @@ public class ManualDriveDookie extends LinearOpMode {
                 double correctionValue = 0;
                 boolean givePower = true;
 
-                if(a>b && b>6.0 && b<16.0) {
+                if(a>b && b>7.0 && b<16.0) {
 
                     correctionValue = -1*(((b-5)*0.2)/11+0.05);
                     givePower = true;
                 }
 
-                else if (b > a && a > 6.0 && a < 16.0) {
+                else if (b > a && a > 7.0 && a < 16.0) {
                     correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
                     givePower = true;
 
-                }else if (a < 6.0 || b < 6.0){
+                }else if (a < 7.0 || b < 7.0){
                     givePower = false;
                 }
 
                 if(givePower) {
-                    rightY = -0.4;
+                    rightY = -0.3;
 
                     leftBack.setPower((correctionValue + rightX) + rightY + leftX);
                     leftFront.setPower((correctionValue + rightX) + rightY - leftX);
@@ -132,7 +132,8 @@ public class ManualDriveDookie extends LinearOpMode {
             }
 
 
-            // put in code from CalibrateSlide
+            // put in code from Cali
+            // brateSlide
             if (mag.isPressed()) {
                 if (!bottom) {
                     bottom = true;
