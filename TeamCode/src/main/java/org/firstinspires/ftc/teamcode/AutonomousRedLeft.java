@@ -60,17 +60,17 @@ public class AutonomousRedLeft extends LinearOpMode {
 
         // Place cone
         // Linear slide up 34 inches
-        hunk.raiseCone(HunkOfMetal.TALLEST - 200);
+        hunk.raiseCone(HunkOfMetal.TALLEST - 100);
 
-        hunk.forwardWithArm(0.5,2.0,HunkOfMetal.TALLEST - 200);
+        hunk.forwardWithArm(0.5,2.0,HunkOfMetal.TALLEST - 100);
         sleep(1000);
 
         // Add code for auto alignment
-        hunk.autoAlign(HunkOfMetal.TALLEST - 200);
+        hunk.autoAlign(HunkOfMetal.TALLEST - 100);
 
         // Release cone
-        hunk.outakeCone(HunkOfMetal.TALLEST - 200);
-        hunk.forwardWithArm(-0.5,3,HunkOfMetal.TALLEST - 200);
+        hunk.outakeCone(HunkOfMetal.TALLEST - 100);
+        hunk.forwardWithArm(-0.5,3,HunkOfMetal.TALLEST - 100);
         // Linear slide down 34 inches
         hunk.lowerCone();
 

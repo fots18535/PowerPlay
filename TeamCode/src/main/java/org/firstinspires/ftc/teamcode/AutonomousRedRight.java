@@ -64,9 +64,10 @@ public class AutonomousRedRight extends LinearOpMode {
         // Linear slide up 34 inches
         hunk.raiseCone(HunkOfMetal.TALLEST - 200);
 
-        hunk.forwardWithArm(0.5,2,HunkOfMetal.TALLEST - 200);
-        sleep(1000);
+        //hunk.forwardWithArm(0.5,2,HunkOfMetal.TALLEST - 200);
+        //sleep(1000);
 
+        hunk.halfSleep(HunkOfMetal.TALLEST - 200, 1000);
         hunk.autoAlign(HunkOfMetal.TALLEST - 200);
         
         // Release cone
