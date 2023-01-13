@@ -12,14 +12,14 @@ public class AutonomousRedLeft extends LinearOpMode {
         HunkOfMetal hunk = new HunkOfMetal(this);
         hunk.initialize();
 
-        SmartRobotEyeballs coneProphet = new SmartRobotEyeballs(this);
+        SmartRobotEyeballsCGP coneProphet = new SmartRobotEyeballsCGP(this);
         coneProphet.initialize();
         waitForStart();
 
         // Read cone thing :)
-        double bulbCount = 0.0;
-        double panelCount = 0.0;
-        double boltCount = 0.0;
+        double golemCount = 0.0;
+        double pizzaCount = 0.0;
+        double catCount = 0.0;
         int i = 0;
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
@@ -32,17 +32,17 @@ public class AutonomousRedLeft extends LinearOpMode {
             {
                 i++;
 
-                if(seen.equals("1 Bolt"))
+                if(seen.equals("c"))
                 {
-                    boltCount++;
+                    catCount++;
                 }
-                else if(seen.equals("2 Bulb"))
+                else if(seen.equals("g"))
                 {
-                    bulbCount++;
+                    golemCount++;
                 }
-                else if(seen.equals("3 Panel"))
+                else if(seen.equals("p"))
                 {
-                    panelCount++;
+                    pizzaCount++;
                 }
             }
 
@@ -53,7 +53,7 @@ public class AutonomousRedLeft extends LinearOpMode {
         hunk.chaChaRealSmooth(-0.5,19);
 
         // Go forward 48 inches
-        hunk.forward(0.5, 50);
+        hunk.forward(0.5, 49);
 
         //Side left 12 inches
         hunk.chaChaRealSmooth(0.5,14);
@@ -66,7 +66,10 @@ public class AutonomousRedLeft extends LinearOpMode {
         sleep(1000);
 
         // Add code for auto alignment
+        //hunk.autoAlign(HunkOfMetal.TALLEST - 100);
+
         hunk.autoAlign(HunkOfMetal.TALLEST - 100);
+        hunk.halfSleep(HunkOfMetal.TALLEST - 100, 1000);
 
         // Release cone
         hunk.outakeCone(HunkOfMetal.TALLEST - 100);
@@ -95,10 +98,10 @@ public class AutonomousRedLeft extends LinearOpMode {
         // Place cone
 
         // Park according to cone
-        if(boltCount > bulbCount && boltCount > panelCount){
+        if(catCount > golemCount && catCount > pizzaCount){
             hunk.chaChaRealSmooth(0.5,35);
         }
-        else if(bulbCount > boltCount && bulbCount > panelCount){
+        else if(golemCount > catCount && golemCount > pizzaCount){
             hunk.chaChaRealSmooth(0.5,11);
         }
         else{

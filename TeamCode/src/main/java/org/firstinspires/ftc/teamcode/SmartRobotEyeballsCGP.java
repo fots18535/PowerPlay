@@ -62,7 +62,7 @@ public class SmartRobotEyeballsCGP {
      * Here we assume it's an Asset.    Also see method initTfod() below .
      */
     //private static final String TFOD_MODEL_ASSET = "PowerPlay.tflite";
-    private static final String TFOD_MODEL_ASSET = "cgp.tflite";
+    private static final String TFOD_MODEL_ASSET = "cpgv2.tflite";
     //private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
 
     private static final String[] LABELS = {

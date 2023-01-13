@@ -4,18 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SmartRobotEyeballs;
+import org.firstinspires.ftc.teamcode.SmartRobotEyeballsCGP;
 
 @TeleOp
 public class CameraTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        SmartRobotEyeballs coneProphet = new SmartRobotEyeballs(this);
+        SmartRobotEyeballsCGP coneProphet = new SmartRobotEyeballsCGP(this);
         coneProphet.initialize();
         waitForStart();
 
-        double bulbCount = 0.0;
-        double panelCount = 0.0;
-        double boltCount = 0.0;
+        double golemCount = 0.0;
+        double pizzaCount = 0.0;
+        double catCount = 0.0;
         int i = 0;
 
         while(i < 100)
@@ -25,25 +26,25 @@ public class CameraTest extends LinearOpMode {
             if(seen != null)
             {
                 i++;
-                if(seen.equals("1 Bolt"))
+                if(seen.equals("c"))
                 {
-                    boltCount++;
+                    catCount++;
                 }
-                else if(seen.equals("2 Bulb"))
+                else if(seen.equals("g"))
                 {
-                    bulbCount++;
+                    golemCount++;
                 }
-                else if(seen.equals("3 Panel"))
+                else if(seen.equals("p"))
                 {
-                    panelCount++;
+                    pizzaCount++;
                 }
             }
 
         }
 
-        telemetry.addData("bulb", bulbCount);
-        telemetry.addData("panel", panelCount);
-        telemetry.addData("bolt", boltCount);
+        telemetry.addData("bulb", golemCount);
+        telemetry.addData("panel", pizzaCount);
+        telemetry.addData("bolt", catCount);
         telemetry.update();
 
         while (opModeIsActive())
