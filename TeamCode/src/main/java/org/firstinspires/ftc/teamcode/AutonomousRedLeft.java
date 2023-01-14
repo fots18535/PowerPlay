@@ -53,23 +53,24 @@ public class AutonomousRedLeft extends LinearOpMode {
         hunk.chaChaRealSmooth(-0.5,19);
 
         // Go forward 48 inches
-        hunk.forward(0.5, 49);
+        hunk.forward(0.5, 51);
 
         //Side left 12 inches
-        hunk.chaChaRealSmooth(0.5,14);
+        hunk.chaChaRealSmooth(0.5,11);
 
         // Place cone
         // Linear slide up 34 inches
         hunk.raiseCone(HunkOfMetal.TALLEST - 100);
 
-        hunk.forwardWithArm(0.5,2.0,HunkOfMetal.TALLEST - 100);
+        hunk.forwardWithArm(0.5,3.0,HunkOfMetal.TALLEST - 100);
         sleep(1000);
 
         // Add code for auto alignment
         //hunk.autoAlign(HunkOfMetal.TALLEST - 100);
 
-        hunk.autoAlign(HunkOfMetal.TALLEST - 100);
-        hunk.halfSleep(HunkOfMetal.TALLEST - 100, 1000);
+        //hunk.autoAlign(HunkOfMetal.TALLEST - 100);
+        //hunk.halfSleep(HunkOfMetal.TALLEST - 100, 1000);
+        //hunk.halfSleep(HunkOfMetal.TALLEST - 300, 1000);
 
         // Release cone
         hunk.outakeCone(HunkOfMetal.TALLEST - 100);
@@ -99,7 +100,7 @@ public class AutonomousRedLeft extends LinearOpMode {
 
         // Park according to cone
         if(catCount > golemCount && catCount > pizzaCount){
-            hunk.chaChaRealSmooth(0.5,35);
+            hunk.chaChaRealSmooth(0.5,37);
         }
         else if(golemCount > catCount && golemCount > pizzaCount){
             hunk.chaChaRealSmooth(0.5,11);

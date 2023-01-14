@@ -396,10 +396,10 @@ public class HunkOfMetal {
 
             if (a > b && b > 9.0 && b < 16.0) {
 
-                correctionValue = -1 * (((b - 5) * 0.2) / 11 + 0.05);
+                correctionValue = -0.3;// -1 * (((b - 5) * 0.2) / 11 + 0.05);
                 givePower = true;
             } else if (b > a && a > 9.0 && a < 16.0) {
-                correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
+                correctionValue = 0.3; // ((a - 5) * 0.2) / 11 + 0.05;
                 givePower = true;
 
             } else if (a < 9.0 || b < 9.0) {
