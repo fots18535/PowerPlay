@@ -53,10 +53,10 @@ public class AutonomousRedLeft extends LinearOpMode {
         hunk.chaChaRealSmooth(-0.5,19);
 
         // Go forward 48 inches
-        hunk.forward(0.5, 51);
+        hunk.forward(0.5, 50);
 
         //Side left 12 inches
-        hunk.chaChaRealSmooth(0.5,11);
+        hunk.chaChaRealSmooth(0.5,10);
 
         // Place cone
         // Linear slide up 34 inches

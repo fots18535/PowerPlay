@@ -55,7 +55,7 @@ public class AutonomousRedRight extends LinearOpMode {
         hunk.chaChaRealSmooth(0.5,28.65);
 
         // Go forward 48 inches
-        hunk.forward(0.5, 50);
+        hunk.forward(0.5, 52);
 
         //Side right 12 inches
         hunk.chaChaRealSmooth(-0.5,13);
@@ -108,7 +108,7 @@ public class AutonomousRedRight extends LinearOpMode {
             hunk.chaChaRealSmooth(-0.5,11);
         }
         else{
-            hunk.chaChaRealSmooth(-0.5,33);
+            hunk.chaChaRealSmooth(-0.5,37);
         }
     }
 }
