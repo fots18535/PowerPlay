@@ -80,30 +80,33 @@ public class ManualDriveDookie extends LinearOpMode {
             double leftY = gamepad1.left_stick_y * slowSpeed;
             double rightX = -gamepad1.right_stick_x * slowSpeed;
             double rightY = gamepad1.right_stick_y * slowSpeed;
-
-            if (gamepad1.a){
+            double distance = 7.0;
+            //if(gamepad1.b)
+                //distance = 7.0;
+            if(gamepad1.a){
                 double a = lazerLeft.getDistance(DistanceUnit.INCH);
                 double b = lazerRight.getDistance(DistanceUnit.INCH);
+                telemetry.addData("lazerLeft", a);
+                telemetry.addData("lazerRight", b);
                 double correctionValue = 0;
                 boolean givePower = true;
 
-                if(a>b && b>7.0 && b<16.0) {
+                if(a > b && b > distance && b < 16.0) {
 
                     correctionValue = -1*(((b-5)*0.2)/11+0.05);
                     givePower = true;
                 }
 
-                else if (b > a && a > 7.0 && a < 16.0) {
+                else if (b > a && a > distance && a < 16.0) {
                     correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
                     givePower = true;
 
-                }else if (a < 7.0 || b < 7.0){
+                }else if (a < distance || b < distance){
                     givePower = false;
                 }
 
                 if(givePower) {
-                    rightY = -0.3;
-
+                    rightY = -0.2;
                     leftBack.setPower((correctionValue + rightX) + rightY + leftX);
                     leftFront.setPower((correctionValue + rightX) + rightY - leftX);
                     rightBack.setPower((correctionValue + rightX) - rightY + leftX);
