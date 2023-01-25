@@ -86,6 +86,7 @@ public class ConeAndPoleHome {
         Mat mask = new Mat();
         Mat mask3chan = new Mat();
         Mat output = new Mat();
+        int width;
 
         Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
         Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(6, 6));
@@ -109,9 +110,9 @@ public class ConeAndPoleHome {
         public void init(Mat firstFrame) {
             Imgproc.cvtColor(firstFrame, hsv, Imgproc.COLOR_RGB2HSV);
             Core.inRange(hsv, lower, upper, mask);
-            Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
+            //Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
 
-            int w = firstFrame.width();
+            width = firstFrame.width();
             int h = firstFrame.height();
         }
 
@@ -120,7 +121,7 @@ public class ConeAndPoleHome {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
 
             Core.inRange(hsv, lower, upper, mask);
-            Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
+            //Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
 
             List<MatOfPoint> contours = new ArrayList<>();
             Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
@@ -161,23 +162,17 @@ public class ConeAndPoleHome {
                 Imgproc.circle(input, new Point(biggestX, biggestY), 5, new Scalar(255, 0, 0), 2);
             }
 
-/*
-                blur(mask, mask, Size(3, 3));
-                vector<vector<Point> > contours;
-                findContours(mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-
-                vector<vector<Point> > contours_poly(contours.size());
-                for (size_t i = 0; i < contours.size(); i++)
-                {
-                    approxPolyDP(contours[i], contours_poly[i], 3, true);
-                    Rect r = boundingRect(contours_poly[i]);
-                    if(r.area() > 300) {
-                        rectangle(mask_3, r, 255, 2);
-                    }
-                }
-  */
-
             return input;
+        }
+
+        public Detection getDetection()
+        {
+            return currentDetection;
+        }
+
+        public int getWidth()
+        {
+            return width;
         }
     }
 
@@ -185,5 +180,14 @@ public class ConeAndPoleHome {
         if(pipeline != null) {
             pipeline.setTarget(target);
         }
+    }
+    public Detection getDetection()
+    {
+        return pipeline.getDetection();
+    }
+
+    public int getWidth()
+    {
+        return pipeline.getWidth();
     }
 }

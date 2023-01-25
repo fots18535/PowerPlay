@@ -439,11 +439,22 @@ public class HunkOfMetal {
 
 
 
-    private void stopMotors() {
-        leftBack.setPower(0.0);
+    public void stopMotors() {
         leftFront.setPower(0.0);
         rightBack.setPower(0.0);
         rightFront.setPower(0.0);
+    }
+
+    // Positive power slides left
+    // Negative power slides right
+    public void chaChaRealSmooth(double power) { leftBack.setPower(0.0);
+
+
+            leftBack.setPower(-power);
+            leftFront.setPower(power);
+            rightBack.setPower(-power);
+            rightFront.setPower(power);
+
     }
 }
 
