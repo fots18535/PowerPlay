@@ -19,6 +19,8 @@ public class TestVisionAlign extends LinearOpMode {
             Detection iSeeU = vision.getDetection();
 
             telemetry.addData("midpoint", midpoint);
+            telemetry.addData("x", iSeeU.getX());
+            telemetry.update();
 
             if(iSeeU.getX() > midpoint - 20 && iSeeU.getX() < midpoint + 20)
             {

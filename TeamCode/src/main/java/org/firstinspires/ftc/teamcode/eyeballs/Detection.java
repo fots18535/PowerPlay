@@ -34,4 +34,10 @@ public class Detection {
     public void setY(int y) {
         this.y = y;
     }
+
+    @Override
+    public Detection clone() {
+        Detection d = new Detection(this.getArea(), this.getX(), this.getY());
+        return d;
+    }
 }

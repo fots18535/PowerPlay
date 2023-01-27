@@ -167,7 +167,7 @@ public class ConeAndPoleHome {
 
         public Detection getDetection()
         {
-            return currentDetection;
+            return currentDetection.clone();
         }
 
         public int getWidth()
