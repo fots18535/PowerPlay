@@ -31,6 +31,7 @@ public class HunkOfMetal {
     public static final int TALLEST = 5700;
     public static final int MEDIUM = 4000;
     public static final int SHORTY = 2500;
+    double distance = 7.0;
 
     float ticksPerInch = 59.0f;
     float gyroCorrection = -0.04f;
@@ -394,15 +395,17 @@ public class HunkOfMetal {
             double correctionValue = 0;
             boolean givePower = true;
 
-            if (a > b && b > 9.0 && b < 16.0) {
+            if(a > b && b > distance && b < 16.0) {
 
-                correctionValue = -0.3;// -1 * (((b - 5) * 0.2) / 11 + 0.05);
+                correctionValue = -1*(((b-5)*0.2)/11+0.05);
                 givePower = true;
-            } else if (b > a && a > 9.0 && a < 16.0) {
-                correctionValue = 0.3; // ((a - 5) * 0.2) / 11 + 0.05;
+            }
+
+            else if (b > a && a > distance && a < 16.0) {
+                correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
                 givePower = true;
 
-            } else if (a < 9.0 || b < 9.0) {
+            }else if (a < distance || b < distance){
                 givePower = false;
             }
 

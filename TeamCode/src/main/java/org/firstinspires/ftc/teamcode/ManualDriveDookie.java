@@ -171,26 +171,6 @@ public class ManualDriveDookie extends LinearOpMode {
 
             } else if (gamepad2.dpad_up) {
                 slideMotor.setPower(ticRamp(TALLEST, slideMotor.getCurrentPosition(), -1.0));
-
-                if(slideMotor.getCurrentPosition()>=TALLEST) {
-                    double a = lazerLeft.getDistance(DistanceUnit.INCH);
-                    double b = lazerRight.getDistance(DistanceUnit.INCH);
-                    if (b <= 5.0 && a <= 5.0) {
-                        power = 0;
-                        correction = 0;
-                    } else if (b > 5.0 && b < 16.0 && a > 16.0) {
-                        telemetry.addData("lazerLeft", a);
-                        telemetry.addData("lazerRight", b);
-                        power = .1;
-                        correction = -1 * (((b - 5) * 0.2) / 11 + 0.05);
-                    } else if (a > 5.0 && a < 16.0 && b > 16.0) {
-                        power = .1;
-                        correction = ((a - 5) * 0.2) / 11 + 0.05;
-                    } else {
-                    }
-                    telemetry.update();
-                }
-
             } else if (gamepad2.dpad_down) {
                 if (bottom) {
                     slideMotor.setPower(0.0);
