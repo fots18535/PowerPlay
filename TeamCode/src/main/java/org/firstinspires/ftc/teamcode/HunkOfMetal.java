@@ -31,7 +31,7 @@ public class HunkOfMetal {
     public static final int TALLEST = 5700;
     public static final int MEDIUM = 4000;
     public static final int SHORTY = 2500;
-    double distance = 7.0;
+
 
     float ticksPerInch = 59.0f;
     float gyroCorrection = -0.04f;
@@ -388,6 +388,12 @@ public class HunkOfMetal {
         double leftX = 0.0;
         double rightY = 0.0;
         double leftY = 0.0;
+        double distance = 7.0;
+
+        if(ticHeight > 5000)
+        {
+            distance = 8.0;
+        }
 
         while (mode.opModeIsActive()) {
             double a = lazerLeft.getDistance(DistanceUnit.INCH);
