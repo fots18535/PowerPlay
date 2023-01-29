@@ -87,6 +87,7 @@ public class ConeAndPoleHome {
         Mat mask3chan = new Mat();
         Mat output = new Mat();
         int width;
+        int height;
 
         Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
         Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(6, 6));
@@ -113,7 +114,7 @@ public class ConeAndPoleHome {
             //Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
 
             width = firstFrame.width();
-            int h = firstFrame.height();
+            height = firstFrame.height();
         }
 
         @Override
@@ -160,6 +161,14 @@ public class ConeAndPoleHome {
 
                 Imgproc.drawContours(input, contours, biggestIndex, new Scalar(255, 0, 0), 2);
                 Imgproc.circle(input, new Point(biggestX, biggestY), 5, new Scalar(255, 0, 0), 2);
+            }
+
+            for(int i = 50; i < width; i+= 50) {
+                Imgproc.line(input, new Point(i, 0), new Point(i, height-1), new Scalar(255, 0, 0), 2);
+            }
+
+            for(int i = 50; i < height; i+= 50) {
+                Imgproc.line(input, new Point(0, i), new Point(width -1 , i), new Scalar(255, 0, 0), 2);
             }
 
             return input;

@@ -62,7 +62,8 @@ public class AutonomousRightFancy extends LinearOpMode {
         hunk.raiseCone(HunkOfMetal.TALLEST);
         //Auto align
         hunk.autoAlign(HunkOfMetal.TALLEST);
-        hunk.outakeCone(HunkOfMetal.TALLEST);
+        //hunk.outakeCone(HunkOfMetal.TALLEST);
+        hunk.halfSleep(HunkOfMetal.TALLEST, 100000);
 
         //Side right 12 inches
 //        hunk.chaChaRealSmooth(-0.5,13);

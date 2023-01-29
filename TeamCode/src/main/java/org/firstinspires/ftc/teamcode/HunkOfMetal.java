@@ -28,7 +28,7 @@ public class HunkOfMetal {
     TouchSensor mag;
     DistanceSensor lazerLeft;
     DistanceSensor lazerRight;
-    public static final int TALLEST = 5700;
+    public static final int TALLEST = 5700 - 200;
     public static final int MEDIUM = 4000;
     public static final int SHORTY = 2500;
 
@@ -392,7 +392,7 @@ public class HunkOfMetal {
 
         if(ticHeight > 5000)
         {
-            distance = 8.0;
+            distance = 8;
         }
 
         while (mode.opModeIsActive()) {
@@ -401,13 +401,17 @@ public class HunkOfMetal {
             double correctionValue = 0;
             boolean givePower = true;
 
-            if(a > b && b > distance && b < 16.0) {
+            mode.telemetry.addData("leftLazer", a);
+            mode.telemetry.addData("rightLazer", b);
+            mode.telemetry.update();
+
+            if(a > b && b > distance) {
 
                 correctionValue = -1*(((b-5)*0.2)/11+0.05);
                 givePower = true;
             }
 
-            else if (b > a && a > distance && a < 16.0) {
+            else if (b > a && a > distance) {
                 correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
                 givePower = true;
 
@@ -415,10 +419,16 @@ public class HunkOfMetal {
                 givePower = false;
             }
 
+            else
+            {
+                correctionValue = 0;
+                givePower = true;
+            }
+
             slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
 
             if (givePower) {
-                rightY = -0.3;
+                rightY = -0.2;
 
                 //leftBack.setPower((correctionValue + rightX) + rightY + leftX);
                 //leftFront.setPower((correctionValue + rightX) + rightY - leftX);
@@ -452,6 +462,7 @@ public class HunkOfMetal {
         leftFront.setPower(0.0);
         rightBack.setPower(0.0);
         rightFront.setPower(0.0);
+        leftBack.setPower(0.0);
     }
 
     // Positive power slides left

@@ -22,6 +22,7 @@ public class TestVisionAlign extends LinearOpMode {
             telemetry.addData("x", iSeeU.getX());
             telemetry.update();
 
+
             if(iSeeU.getX() > midpoint - 20 && iSeeU.getX() < midpoint + 20)
             {
                 hunk.stopMotors();
