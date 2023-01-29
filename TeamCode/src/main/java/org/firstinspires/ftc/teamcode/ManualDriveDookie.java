@@ -188,7 +188,7 @@ public class ManualDriveDookie extends LinearOpMode {
             // press dpad down = lower to ground
 
            if(gamepad2.triangle){
-               slideMotor.setPower(ticRamp(-240*conestack,slideMotor.getCurrentPosition(),-1.0));
+               slideMotor.setPower(ticRamp(240*conestack,slideMotor.getCurrentPosition(),-1.0));
            }
 
             if(gamepad2.square){

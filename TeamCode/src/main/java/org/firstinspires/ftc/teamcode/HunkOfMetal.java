@@ -407,7 +407,7 @@ public class HunkOfMetal {
 
             if(a > b && b > distance) {
 
-                correctionValue = -1*(((b-5)*0.2)/11+0.05);
+                correctionValue = -1 * (((b - 5) * 0.2) / 11 + 0.05);
                 givePower = true;
             }
 
@@ -429,11 +429,6 @@ public class HunkOfMetal {
 
             if (givePower) {
                 rightY = -0.2;
-
-                //leftBack.setPower((correctionValue + rightX) + rightY + leftX);
-                //leftFront.setPower((correctionValue + rightX) + rightY - leftX);
-                //rightBack.setPower((correctionValue + rightX) - rightY + leftX);
-                //rightFront.setPower((correctionValue + rightX) - rightY - leftX);
 
                 leftBack.setPower(rightX + rightY + (-correctionValue + leftX));
                 leftFront.setPower(rightX + rightY - (-correctionValue + leftX));
@@ -467,14 +462,11 @@ public class HunkOfMetal {
 
     // Positive power slides left
     // Negative power slides right
-    public void chaChaRealSmooth(double power) { leftBack.setPower(0.0);
-
-
+    public void chaChaRealSmooth(double power) {
             leftBack.setPower(-power);
             leftFront.setPower(power);
             rightBack.setPower(-power);
             rightFront.setPower(power);
-
     }
 }
 

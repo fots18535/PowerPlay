@@ -18,6 +18,11 @@ public class AutonomousRightFancy extends LinearOpMode {
         coneProphet.initialize();
         waitForStart();
 
+        // Things the robot needs to know
+        double driveSpeed = 0.5;
+        int conestack = 4; //number of cones not on the floor
+
+
         // Read cone thing :)
         double golemCount = 0.0;
         double pizzaCount = 0.0;
@@ -50,14 +55,21 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         }
 
-        hunk.forward(0.5,2);
-        // Slide left 24 inches
-        hunk.chaChaRealSmooth(0.5,28.65);
+        //Get reading from Gyroscope
+        //ToDo: create a gyro2 object and reset it
 
+        // Move away from wall
+        hunk.forward(driveSpeed,2);
+        // Slide left 24 inches
+        hunk.chaChaRealSmooth(driveSpeed,28.65);
         // Go forward 48 inches
-        hunk.forward(0.5, 26);
-        //Turn 45 degrees
-        hunk.turnLeft(35,0.5);
+        hunk.forward(driveSpeed, 26);
+        //Turn toward pole
+        hunk.turnLeft(35,driveSpeed);
+
+        //Get reading from encoder
+        //ToDo: check wheel encoder and save value
+
         //Raise cone
         hunk.raiseCone(HunkOfMetal.TALLEST);
         //Auto align
@@ -65,49 +77,29 @@ public class AutonomousRightFancy extends LinearOpMode {
         //hunk.outakeCone(HunkOfMetal.TALLEST);
         hunk.halfSleep(HunkOfMetal.TALLEST, 100000);
 
-        //Side right 12 inches
-//        hunk.chaChaRealSmooth(-0.5,13);
-//
-//        // Place cone
-//        // Linear slide up 34 inches
-//        hunk.raiseCone(HunkOfMetal.TALLEST - 100);
-//
-//        hunk.forwardWithArm(0.5,2.0,HunkOfMetal.TALLEST - 100);
-//        sleep(1000);
-//
-//
-//        //hunk.autoAlign(HunkOfMetal.TALLEST - 100);
-//        //hunk.halfSleep(HunkOfMetal.TALLEST - 100, 1000);
-//        //hunk.halfSleep(HunkOfMetal.TALLEST - 300, 1000);
-//
-//        // Release cone
-//        hunk.outakeCone(HunkOfMetal.TALLEST - 100);
-//        hunk.forwardWithArm(-0.5,3,HunkOfMetal.TALLEST - 100);
-//        // Linear slide down 34 inches
-//        hunk.lowerCone();
-//
-//
-//
-//        //Turn left 90 degrees
-//        //hunk.turnLeft(90,1.0);
-//
-//        // Go forward 18 inches
-//        //hunk.forward(1.0,18);
-//
-//
-//        // Pick up cone
-//        //hunk.raiseCone(1006);
-//        //hunk.forwardWithArm(0.5,8,1006);
-//
-//        // Go back 18 inches
-//        //hunk.forward(-1.0,18);
-//
-//        // Turn right 90 degrees
-//        //hunk.turnRight(90,1.0);
-//
-//        // Place cone
-//
-//
+        //Backup the same distance we drove forward
+        //ToDo: check the wheel encoder again and backup
+        //hunk.forwardWithArm(-1*driveSpeed,?????,HunkOfMetal.TALLEST);
+        // Linear slide down
+        //hunk.lowerCone();
+
+        //Turn back to the starting orientation
+        //ToDo: Check the gyro and turn right to get back to zero
+
+        //Drive straight to the third row
+        //hunk.forward(driveSpeed,????);
+
+        //Turn right 90 degrees
+        //hunk.turnRight(90,driveSpeed);
+
+        //Start a loop here?
+
+        //Drive toward the cone stack
+        //hunk.forward(driveSpeed,????);
+
+        //Align with the cone stack using the camera
+
+
 //        // Park according to cone
 //        if(catCount > golemCount && catCount > pizzaCount){
 //            hunk.chaChaRealSmooth(0.5,11);
