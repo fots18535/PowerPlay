@@ -468,6 +468,16 @@ public class HunkOfMetal {
             rightBack.setPower(-power);
             rightFront.setPower(power);
     }
+
+    public Gyro2 gyro()
+    {
+        return gyro;
+    }
+
+    public long getMotor()
+    {
+        return leftFront.getCurrentPosition();
+    }
 }
 
 

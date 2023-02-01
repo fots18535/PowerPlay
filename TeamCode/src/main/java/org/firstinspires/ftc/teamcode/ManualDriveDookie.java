@@ -23,6 +23,8 @@ public class ManualDriveDookie extends LinearOpMode {
     static final int MEDIUM = 4000;
     static final int SHORTY = 2500;
 
+    int howHigh = 0;
+
     @Override
     public void runOpMode() throws InterruptedException {
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
@@ -90,6 +92,11 @@ public class ManualDriveDookie extends LinearOpMode {
                 telemetry.addData("lazerRight", b);
                 double correctionValue = 0;
                 boolean givePower = true;
+
+                if(slideMotor.getCurrentPosition() > 5000)
+                {
+                    distance = 8.0;
+                }
 
                 if(a > b && b > distance && b < 16.0) {
 

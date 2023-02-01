@@ -57,6 +57,8 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         //Get reading from Gyroscope
         //ToDo: create a gyro2 object and reset it
+        Gyro2 gyro = hunk.gyro();
+        gyro.reset();
 
         // Move away from wall
         hunk.forward(driveSpeed,2);
@@ -67,30 +69,31 @@ public class AutonomousRightFancy extends LinearOpMode {
         //Turn toward pole
         hunk.turnLeft(35,driveSpeed);
 
-        //Get reading from encoder
-        //ToDo: check wheel encoder and save value
-
         //Raise cone
         hunk.raiseCone(HunkOfMetal.TALLEST);
-        //Auto align
+        //Auto align check start position
+        long loco = hunk.getMotor();
+        telemetry.addData("loco", loco);
         hunk.autoAlign(HunkOfMetal.TALLEST);
-        //hunk.outakeCone(HunkOfMetal.TALLEST);
-        hunk.halfSleep(HunkOfMetal.TALLEST, 100000);
+        long locoAfter = hunk.getMotor();
+        telemetry.addData("locoAfter", locoAfter);
+        hunk.outakeCone(HunkOfMetal.TALLEST);
+        telemetry.addData("divide", (locoAfter - loco) / 59.0);
+        telemetry.update();
 
         //Backup the same distance we drove forward
         //ToDo: check the wheel encoder again and backup
-        //hunk.forwardWithArm(-1*driveSpeed,?????,HunkOfMetal.TALLEST);
-        // Linear slide down
-        //hunk.lowerCone();
+        hunk.forward(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0));
+        hunk.turnRight(35, driveSpeed);
 
-        //Turn back to the starting orientation
-        //ToDo: Check the gyro and turn right to get back to zero
+        // Linear slide down
+        hunk.lowerCone();
 
         //Drive straight to the third row
-        //hunk.forward(driveSpeed,????);
+        hunk.forward(driveSpeed, 28);
 
         //Turn right 90 degrees
-        //hunk.turnRight(90,driveSpeed);
+        hunk.turnRight(90,driveSpeed);
 
         //Start a loop here?
 
@@ -110,6 +113,10 @@ public class AutonomousRightFancy extends LinearOpMode {
 //        else{
 //            hunk.chaChaRealSmooth(-0.5,37);
 //        }
+
     }
+
+
+
 }
 
