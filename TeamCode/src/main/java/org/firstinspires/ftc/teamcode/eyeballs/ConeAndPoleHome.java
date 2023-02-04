@@ -65,8 +65,8 @@ public class ConeAndPoleHome {
 
     public static class IconDeterminationPipeline extends OpenCvPipeline {
         // HSV threshold values
-        Scalar blueLower = new Scalar(107, 131, 37);
-        Scalar blueUpper = new Scalar(124, 221, 252);
+        Scalar blueLower = new Scalar(114,114,45);
+        Scalar blueUpper = new Scalar(122,238,255);
 
         Scalar redLower = new Scalar(78, 78, 37);
         Scalar redUpper = new Scalar(112, 255, 255);
@@ -84,8 +84,7 @@ public class ConeAndPoleHome {
          */
         Mat hsv = new Mat();
         Mat mask = new Mat();
-        Mat mask3chan = new Mat();
-        Mat output = new Mat();
+        Mat erode = new Mat();
         int width;
         int height;
 
@@ -111,7 +110,6 @@ public class ConeAndPoleHome {
         public void init(Mat firstFrame) {
             Imgproc.cvtColor(firstFrame, hsv, Imgproc.COLOR_RGB2HSV);
             Core.inRange(hsv, lower, upper, mask);
-            //Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
 
             width = firstFrame.width();
             height = firstFrame.height();
@@ -122,7 +120,9 @@ public class ConeAndPoleHome {
             Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
 
             Core.inRange(hsv, lower, upper, mask);
-            //Imgproc.cvtColor(mask, mask3chan, Imgproc.COLOR_GRAY2RGB);
+
+            Imgproc.erode(mask, erode, erodeElement);
+            Imgproc.erode(erode, mask, dilateElement);
 
             List<MatOfPoint> contours = new ArrayList<>();
             Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
