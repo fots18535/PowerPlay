@@ -19,7 +19,7 @@ public class AutonomousRightFancy extends LinearOpMode {
         waitForStart();
 
         // Things the robot needs to know
-        double driveSpeed = 0.5;
+        double driveSpeed = 0.7;
         int conestack = 4; //number of cones not on the floor
 
 
@@ -28,6 +28,7 @@ public class AutonomousRightFancy extends LinearOpMode {
         double pizzaCount = 0.0;
         double catCount = 0.0;
         int i = 0;
+
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
@@ -57,24 +58,24 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         //Get reading from Gyroscope
         //ToDo: create a gyro2 object and reset it
-        Gyro2 gyro = hunk.gyro();
-        gyro.reset();
+        //Gyro2 gyro = hunk.gyro();
+        //gyro.reset();
 
         // Move away from wall
         hunk.forward(driveSpeed,2);
         // Slide left 24 inches
         hunk.chaChaRealSmooth(driveSpeed,28.65);
-        // Go forward 48 inches
-        hunk.forward(driveSpeed, 26);
+        // Go forward 26 inches
+        hunk.forwardWithArm(driveSpeed, 26, HunkOfMetal.TALLEST);
         //Turn toward pole
         hunk.turnLeft(35,driveSpeed);
-
         //Raise cone
-        hunk.raiseCone(HunkOfMetal.TALLEST);
+       // hunk.raiseCone(HunkOfMetal.TALLEST);
         //Auto align check start position
         long loco = hunk.getMotor();
         telemetry.addData("loco", loco);
         hunk.autoAlign(HunkOfMetal.TALLEST);
+        //Measure distance driven
         long locoAfter = hunk.getMotor();
         telemetry.addData("locoAfter", locoAfter);
         hunk.outakeCone(HunkOfMetal.TALLEST);
@@ -83,17 +84,51 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         //Backup the same distance we drove forward
         //ToDo: check the wheel encoder again and backup
-        hunk.forward(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0));
+        hunk.forwardWithArm(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0),0);
         hunk.turnRight(35, driveSpeed);
 
         // Linear slide down
-        hunk.lowerCone();
+        //hunk.lowerCone();
 
         //Drive straight to the third row
-        hunk.forward(driveSpeed, 28);
+        hunk.forward(driveSpeed, 26);
 
         //Turn right 90 degrees
-        hunk.turnRight(90,driveSpeed);
+        hunk.turnRight(80, driveSpeed);
+
+        //drive foward
+        hunk.forward(driveSpeed, 34);
+
+        //raise arm
+        hunk.raiseCone(240*conestack);
+
+        //autoalign
+        hunk.autoAlign(240*conestack);
+
+        //go forward and pick up cone
+        hunk.coneStackAlign();
+
+        hunk.forward(-.2,1);
+
+        //Raise cone so don't knock over stack
+        hunk.raiseCone(HunkOfMetal.SHORTY);
+
+        hunk.forwardWithArm(-1*driveSpeed, 22, HunkOfMetal.SHORTY);
+
+        hunk.turnRight(35,.5);
+
+        hunk.autoAlign(HunkOfMetal.SHORTY);
+
+        hunk.outakeCone(HunkOfMetal.SHORTY);
+
+        hunk.forward(-1,6);
+
+
+
+
+
+
+
 
         //Start a loop here?
 

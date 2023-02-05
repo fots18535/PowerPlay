@@ -28,6 +28,7 @@ public class HunkOfMetal {
     TouchSensor mag;
     DistanceSensor lazerLeft;
     DistanceSensor lazerRight;
+    DistanceSensor lazerCenter;
     public static final int TALLEST = 5700 - 200;
     public static final int MEDIUM = 4000;
     public static final int SHORTY = 2500;
@@ -56,7 +57,7 @@ public class HunkOfMetal {
         mag = mode.hardwareMap.get(TouchSensor.class, "magSense");
         lazerLeft = mode.hardwareMap.get(DistanceSensor.class, "lazerLeft");
         lazerRight = mode.hardwareMap.get(DistanceSensor.class, "lazerRight");
-
+        lazerCenter = mode.hardwareMap.get(DistanceSensor.class, "lazerCenter");
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -300,8 +301,8 @@ public class HunkOfMetal {
     }
 
     public void raiseCone(int ticHeight) {
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    //    slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //    slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         while (mode.opModeIsActive() && tickYeah(slideMotor) < ticHeight - 100) {
             slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
         }
@@ -315,9 +316,11 @@ public class HunkOfMetal {
 
     public void lowerCone() {
         slideMotor.setPower(1.0);
-        while (mode.opModeIsActive() && !mag.isPressed()) {
-        }
+
         slideMotor.setPower(0.0);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     public int tickYeah(DcMotor motor) {
@@ -331,8 +334,10 @@ public class HunkOfMetal {
 
     private double ticRamp(int goal, int cur, double power) {
         double val = 0.0;
-
-        if (Math.abs(goal) - Math.abs(cur) <= 300) {
+        if (goal == 0 && mag.isPressed()) {
+            val = 0.0;
+        }
+        else if (Math.abs(goal) - Math.abs(cur) <= 300) {
             val = power * (Math.abs(goal) - Math.abs(cur)) / 300;
         } else {
             val = power;
@@ -382,7 +387,23 @@ public class HunkOfMetal {
         rightBack.setPower(0);
         rightFront.setPower(0);
     }
+public void coneStackAlign(){
+    intakeWheel.setPower(1.0);
+    intakeWheelDeux.setPower(-1.0);
+    double rpower = .2;
+    leftBack.setPower(-rpower);
+    leftFront.setPower(-rpower);
+    rightBack.setPower(rpower);
+    rightFront.setPower(rpower);
+    while (mode.opModeIsActive() && lazerCenter.getDistance(DistanceUnit.INCH) >1.5){}
 
+    stopMotors();
+
+    intakeWheel.setPower(0.35);
+    intakeWheelDeux.setPower(-0.35);
+
+
+    }
     public void autoAlign(int ticHeight) {
         double rightX = 0.0;
         double leftX = 0.0;
@@ -392,7 +413,7 @@ public class HunkOfMetal {
 
         if(ticHeight > 5000)
         {
-            distance = 8;
+            distance = 8.25;
         }
 
         while (mode.opModeIsActive()) {
@@ -400,6 +421,7 @@ public class HunkOfMetal {
             double b = lazerRight.getDistance(DistanceUnit.INCH);
             double correctionValue = 0;
             boolean givePower = true;
+            boolean driveFoward = false;
 
             mode.telemetry.addData("leftLazer", a);
             mode.telemetry.addData("rightLazer", b);
@@ -409,26 +431,48 @@ public class HunkOfMetal {
 
                 correctionValue = -1 * (((b - 5) * 0.2) / 11 + 0.05);
                 givePower = true;
+                driveFoward = true;
             }
 
             else if (b > a && a > distance) {
                 correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
                 givePower = true;
+                driveFoward = true;
+            }
 
-            }else if (a < distance || b < distance){
+            //new stuff
+            else if((a < distance || b < distance) && a - b > .5 ) {
+
+                correctionValue = -1 * (((b - 5) * 0.2) / 11 + 0.05);
+                givePower = true;
+                driveFoward = false;
+            }
+
+            else if ((a < distance || b < distance) && b - a > .5 ) {
+                correctionValue = ((a - 5) * 0.2) / 11 + 0.05;
+                givePower = true;
+                driveFoward = false;
+            }
+
+            //end new stuff
+            else if (a < distance || b < distance){
                 givePower = false;
+                driveFoward = false;
             }
 
             else
             {
                 correctionValue = 0;
                 givePower = true;
+                driveFoward = true;
             }
 
             slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
 
             if (givePower) {
-                rightY = -0.2;
+                if (driveFoward) {
+                    rightY = -0.2;
+                }
 
                 leftBack.setPower(rightX + rightY + (-correctionValue + leftX));
                 leftFront.setPower(rightX + rightY - (-correctionValue + leftX));

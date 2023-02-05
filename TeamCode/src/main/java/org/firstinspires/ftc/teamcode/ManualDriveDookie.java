@@ -83,8 +83,7 @@ public class ManualDriveDookie extends LinearOpMode {
             double rightX = -gamepad1.right_stick_x * slowSpeed;
             double rightY = gamepad1.right_stick_y * slowSpeed;
             double distance = 7.0;
-            //if(gamepad1.b)
-                //distance = 7.0;
+
             if(gamepad1.a){
                 double a = lazerLeft.getDistance(DistanceUnit.INCH);
                 double b = lazerRight.getDistance(DistanceUnit.INCH);
