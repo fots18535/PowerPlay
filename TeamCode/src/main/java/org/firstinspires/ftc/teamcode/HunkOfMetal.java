@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.eyeballs.ConeAndPoleHome;
+import org.firstinspires.ftc.teamcode.eyeballs.Detection;
 
 public class HunkOfMetal {
     DcMotor leftBack;
@@ -521,6 +523,60 @@ public void coneStackAlign(){
     public long getMotor()
     {
         return leftFront.getCurrentPosition();
+    }
+
+    ConeAndPoleHome vision;
+    public void startOpenCV() {
+        vision = new ConeAndPoleHome(mode);
+        vision.start();
+        vision.setTarget(0);
+    }
+    public void stopOpenCV() {
+        vision.stop();
+    }
+    public void alignToCone(double inches, double power, double target) {
+        double b = -0.00123 * target;
+
+        // Reset the encoder to 0
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        long startTime = System.currentTimeMillis();
+
+        // Go forward until tics reached
+        while (mode.opModeIsActive()) {
+
+            //absolute value of getCurrentPosition()
+            int tics = leftFront.getCurrentPosition();
+            if (tics < 0) {
+                tics = tics * -1;
+            }
+            //telemetry.addData("debug tics", tics);
+            //telemetry.addData("debug compare to ", length*ticksPerInch);
+
+            if (tics > inches * ticksPerInch) {
+                break;
+            }
+
+            // Get the angle and adjust the power to correct
+            double rpower = ramp(power, startTime);
+            double rightX = 0.0;
+            Detection detect = vision.getDetection();
+            if(detect != null) {
+                rightX = -1.0 * detect.getX() * 0.00123 + b;
+            }
+            leftBack.setPower(rightX - rpower);
+            leftFront.setPower(rightX - rpower);
+            rightBack.setPower(rightX + rpower);
+            rightFront.setPower(rightX + rpower);
+
+            mode.idle();
+        }
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
     }
 }
 
