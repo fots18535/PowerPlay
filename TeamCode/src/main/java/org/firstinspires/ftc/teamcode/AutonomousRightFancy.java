@@ -19,7 +19,7 @@ public class AutonomousRightFancy extends LinearOpMode {
         waitForStart();
 
         // Things the robot needs to know
-        double driveSpeed = 0.7;
+        double driveSpeed = 0.5;
         int conestack = 4; //number of cones not on the floor
 
 
@@ -65,12 +65,15 @@ public class AutonomousRightFancy extends LinearOpMode {
         hunk.forward(driveSpeed,2);
         // Slide left 24 inches
         hunk.chaChaRealSmooth(driveSpeed,28.65);
+
+        hunk.resetSlideEncoder();
+
         // Go forward 26 inches
-        hunk.forwardWithArm(driveSpeed, 26, HunkOfMetal.TALLEST);
+        hunk.forwardWithArm(driveSpeed, 22, HunkOfMetal.TALLEST);
         //Turn toward pole
+        hunk.raiseCone(HunkOfMetal.TALLEST);
         hunk.turnLeft(35,driveSpeed);
         //Raise cone
-       // hunk.raiseCone(HunkOfMetal.TALLEST);
         //Auto align check start position
         long loco = hunk.getMotor();
         telemetry.addData("loco", loco);
@@ -84,7 +87,7 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         //Backup the same distance we drove forward
         //ToDo: check the wheel encoder again and backup
-        hunk.forwardWithArm(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0),0);
+        hunk.forward(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0));
         hunk.turnRight(35, driveSpeed);
 
         // Linear slide down

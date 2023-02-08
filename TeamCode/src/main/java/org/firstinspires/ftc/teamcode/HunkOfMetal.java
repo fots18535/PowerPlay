@@ -303,8 +303,8 @@ public class HunkOfMetal {
     }
 
     public void raiseCone(int ticHeight) {
-    //    slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    //    slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         while (mode.opModeIsActive() && tickYeah(slideMotor) < ticHeight - 100) {
             slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
         }
@@ -348,11 +348,15 @@ public class HunkOfMetal {
         return val;
     }
 
-    public void forwardWithArm(double power, double length, int ticHeight) {
+    public void resetSlideEncoder()
+    {
         // Reset the encoder to 0
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Tells the motor to run until we turn it off
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void forwardWithArm(double power, double length, int ticHeight) {
         gyro.reset();
         long startTime = System.currentTimeMillis();
 
@@ -415,7 +419,7 @@ public void coneStackAlign(){
 
         if(ticHeight > 5000)
         {
-            distance = 8.25;
+            distance = 10.0;
         }
 
         while (mode.opModeIsActive()) {
