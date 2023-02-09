@@ -319,10 +319,12 @@ public class HunkOfMetal {
     public void lowerCone() {
         slideMotor.setPower(1.0);
 
-        slideMotor.setPower(0.0);
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        while(mode.opModeIsActive() && !mag.isPressed()) {
 
+        }
+
+        slideMotor.setPower(0.0);
+        resetSlideEncoder();
     }
 
     public int tickYeah(DcMotor motor) {
@@ -351,12 +353,17 @@ public class HunkOfMetal {
     public void resetSlideEncoder()
     {
         // Reset the encoder to 0
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Tells the motor to run until we turn it off
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void forwardWithArm(double power, double length, int ticHeight) {
+        // Reset the encoder to 0
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Tells the motor to run until we turn it off
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         gyro.reset();
         long startTime = System.currentTimeMillis();
 

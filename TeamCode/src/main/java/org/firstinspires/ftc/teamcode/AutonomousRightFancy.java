@@ -71,8 +71,8 @@ public class AutonomousRightFancy extends LinearOpMode {
         // Go forward 26 inches
         hunk.forwardWithArm(driveSpeed, 22, HunkOfMetal.TALLEST);
         //Turn toward pole
-        hunk.raiseCone(HunkOfMetal.TALLEST);
         hunk.turnLeft(35,driveSpeed);
+        hunk.raiseCone(HunkOfMetal.TALLEST);
         //Raise cone
         //Auto align check start position
         long loco = hunk.getMotor();
@@ -87,7 +87,8 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         //Backup the same distance we drove forward
         //ToDo: check the wheel encoder again and backup
-        hunk.forward(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0));
+        hunk.forwardWithArm(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0), HunkOfMetal.TALLEST);
+        hunk.lowerCone();
         hunk.turnRight(35, driveSpeed);
 
         // Linear slide down
