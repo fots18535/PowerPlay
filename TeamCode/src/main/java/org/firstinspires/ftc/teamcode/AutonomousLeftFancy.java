@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Timer;
 
 @Autonomous
-public class AutonomousRightFancy extends LinearOpMode {
+public class AutonomousLeftFancy extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -65,20 +65,20 @@ public class AutonomousRightFancy extends LinearOpMode {
         // Move away from wall
         hunk.forward(driveSpeed,2);
         // Slide left 24 inches
-        hunk.chaChaRealSmooth(driveSpeed,28.65);
+        hunk.chaChaRealSmooth(-1 * driveSpeed,21);
 
         hunk.resetSlideEncoder();
 
         // Go forward 26 inches
         hunk.forwardWithArm(driveSpeed, 22, HunkOfMetal.MEDIUM);
         //Turn toward pole
-        hunk.turnRight(35,turnSpeed);
+        hunk.turnLeft(35,turnSpeed);
         hunk.raiseCone(HunkOfMetal.MEDIUM);
         //Raise cone
         //Auto align check start position
         long loco = hunk.getMotor();
         telemetry.addData("loco", loco);
-        hunk.autoAlign(HunkOfMetal.MEDIUM, 12.0, 7.0);
+        hunk.autoAlign(HunkOfMetal.MEDIUM, 10.0, 6.5);
         //Measure distance driven
         long locoAfter = hunk.getMotor();
         telemetry.addData("locoAfter", locoAfter);
@@ -90,28 +90,28 @@ public class AutonomousRightFancy extends LinearOpMode {
         //ToDo: check the wheel encoder again and backup
         hunk.forwardWithArm(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0), HunkOfMetal.MEDIUM);
         hunk.lowerCone();
-        hunk.turnLeft(41, turnSpeed);
+        hunk.turnRight(41, turnSpeed);
 
         // Linear slide down
         //hunk.lowerCone();
 
         //Drive straight to the third row
-        hunk.forward(driveSpeed, 23);
+        hunk.forward(driveSpeed, 25);
 
         //Turn right 90 degrees
-        hunk.turnRight(85, turnSpeed);
+        hunk.turnLeft(85, turnSpeed);
 
         //drive foward
         hunk.forward(driveSpeed, 34);
 
         //raise arm
-        hunk.raiseCone(240*conestack);
+        hunk.raiseCone(240*conestack + 50);
 
         //autoalign
-        hunk.autoAlign(240*conestack, 12, 7.0);
+        hunk.autoAlign(240*conestack + 50, 12, 7.0);
 
         //go forward and pick up cone
-        hunk.coneStackAlign(240*conestack);
+        hunk.coneStackAlign(240*conestack + 50);
 
         hunk.forward(-.2,1);
 
@@ -120,7 +120,7 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         hunk.forwardWithArm(-1*driveSpeed, 22, HunkOfMetal.SHORTY);
 
-        hunk.turnRight(35,turnSpeed);
+        hunk.turnLeft(35,turnSpeed);
 
         hunk.autoAlign(HunkOfMetal.SHORTY, 12.0, 7.0);
 
@@ -128,22 +128,22 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         hunk.forward(-1,6);
 
-        hunk.turnLeft(35,turnSpeed);
+        hunk.turnRight(35,turnSpeed);
 
         // Park according to cone
         if(catCount > golemCount && catCount > pizzaCount){
-
-            hunk.chaChaRealSmooth(-.4,3);
-            hunk.forward(-driveSpeed,23);
-
+            hunk.forward(driveSpeed, 23);
+            hunk.chaChaRealSmooth(.4,13);
         }
         else if(golemCount > catCount && golemCount > pizzaCount){
-            hunk.chaChaRealSmooth(-.4,3);
+            hunk.chaChaRealSmooth(.4,3);
         }
         else {
-            hunk.turnLeft(5,turnSpeed);
-            hunk.forward(driveSpeed, 23);
-            hunk.chaChaRealSmooth(-.4,13);
+
+
+            hunk.turnRight(5,turnSpeed);
+            hunk.forward(-driveSpeed,23);
+            hunk.chaChaRealSmooth(.4,5);
         }
 
         hunk.lowerCone();

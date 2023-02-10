@@ -320,7 +320,10 @@ public class HunkOfMetal {
         slideMotor.setPower(1.0);
 
         while(mode.opModeIsActive() && !mag.isPressed()) {
-
+            if(Math.abs(slideMotor.getCurrentPosition()) < 300)
+            {
+                slideMotor.setPower(0.2);
+            }
         }
 
         slideMotor.setPower(0.0);
@@ -400,7 +403,9 @@ public class HunkOfMetal {
         rightBack.setPower(0);
         rightFront.setPower(0);
     }
-public void coneStackAlign(){
+public void coneStackAlign(int ticHeight){
+
+
     intakeWheel.setPower(1.0);
     intakeWheelDeux.setPower(-1.0);
     double rpower = .2;
@@ -408,7 +413,12 @@ public void coneStackAlign(){
     leftFront.setPower(-rpower);
     rightBack.setPower(rpower);
     rightFront.setPower(rpower);
-    while (mode.opModeIsActive() && lazerCenter.getDistance(DistanceUnit.INCH) >1.8){}
+    ElapsedTime timer = new ElapsedTime();
+    timer.reset();
+
+    while (mode.opModeIsActive() && lazerCenter.getDistance(DistanceUnit.INCH) >2.0 && timer.seconds() < 3){
+        slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
+    }
 
     stopMotors();
 
@@ -418,15 +428,18 @@ public void coneStackAlign(){
 
     }
     public void autoAlign(int ticHeight) {
+        autoAlign(ticHeight, 12, 7.0);
+    }
+    public void autoAlign(int ticHeight, double highDistance, double otherDistance) {
         double rightX = 0.0;
         double leftX = 0.0;
         double rightY = 0.0;
         double leftY = 0.0;
-        double distance = 7.0;
+        double distance = otherDistance;
 
         if(ticHeight > 5000)
         {
-            distance = 10.0;
+            distance = highDistance;
         }
 
         while (mode.opModeIsActive()) {
@@ -489,7 +502,15 @@ public void coneStackAlign(){
                 if (driveFoward) {
                     rightY = -0.2;
                 }
+                if(correctionValue > .3)
+                {
+                    correctionValue = .3;
+                }
 
+                if(correctionValue < -.3)
+                {
+                    correctionValue = -.3;
+                }
                 leftBack.setPower(rightX + rightY + (-correctionValue + leftX));
                 leftFront.setPower(rightX + rightY - (-correctionValue + leftX));
                 rightBack.setPower(rightX - rightY + (-correctionValue + leftX));

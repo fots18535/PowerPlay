@@ -11,14 +11,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class ConePickUpDistanceSensorTest extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
-        DistanceSensor lazerIntake = hardwareMap.get(DistanceSensor.class, "lazerIntake");
+        DistanceSensor lazerCenter = hardwareMap.get(DistanceSensor.class, "lazerCenter");
 
         waitForStart();
 
         while (opModeIsActive()) {
-            double a = lazerIntake.getDistance(DistanceUnit.INCH);
+            double a = lazerCenter.getDistance(DistanceUnit.INCH);
 
-            telemetry.addData("lazerIntake", "%.2f", a);
+            telemetry.addData("lazerCenter", "%.2f", a);
             telemetry.update();
         }
 
