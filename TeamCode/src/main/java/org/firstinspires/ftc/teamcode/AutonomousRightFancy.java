@@ -19,7 +19,8 @@ public class AutonomousRightFancy extends LinearOpMode {
         waitForStart();
 
         // Things the robot needs to know
-        double driveSpeed = 0.5;
+        double driveSpeed = 0.8;
+        double turnSpeed = 0.5;
         int conestack = 4; //number of cones not on the floor
 
 
@@ -69,15 +70,15 @@ public class AutonomousRightFancy extends LinearOpMode {
         hunk.resetSlideEncoder();
 
         // Go forward 26 inches
-        hunk.forwardWithArm(driveSpeed, 22, HunkOfMetal.TALLEST);
+        hunk.forwardWithArm(driveSpeed, 22, HunkOfMetal.TALLEST + 200);
         //Turn toward pole
-        hunk.turnLeft(35,driveSpeed);
-        hunk.raiseCone(HunkOfMetal.TALLEST);
+        hunk.turnLeft(35,turnSpeed);
+        hunk.raiseCone(HunkOfMetal.TALLEST + 200);
         //Raise cone
         //Auto align check start position
         long loco = hunk.getMotor();
         telemetry.addData("loco", loco);
-        hunk.autoAlign(HunkOfMetal.TALLEST);
+        hunk.autoAlign(HunkOfMetal.TALLEST + 200);
         //Measure distance driven
         long locoAfter = hunk.getMotor();
         telemetry.addData("locoAfter", locoAfter);
@@ -89,16 +90,16 @@ public class AutonomousRightFancy extends LinearOpMode {
         //ToDo: check the wheel encoder again and backup
         hunk.forwardWithArm(-1*driveSpeed, Math.abs((locoAfter - loco) / 59.0), HunkOfMetal.TALLEST);
         hunk.lowerCone();
-        hunk.turnRight(35, driveSpeed);
+        hunk.turnRight(41, turnSpeed);
 
         // Linear slide down
         //hunk.lowerCone();
 
         //Drive straight to the third row
-        hunk.forward(driveSpeed, 26);
+        hunk.forward(driveSpeed, 23);
 
         //Turn right 90 degrees
-        hunk.turnRight(80, driveSpeed);
+        hunk.turnRight(85, turnSpeed);
 
         //drive foward
         hunk.forward(driveSpeed, 34);
@@ -119,13 +120,30 @@ public class AutonomousRightFancy extends LinearOpMode {
 
         hunk.forwardWithArm(-1*driveSpeed, 22, HunkOfMetal.SHORTY);
 
-        hunk.turnRight(35,.5);
+        hunk.turnRight(35,turnSpeed);
 
         hunk.autoAlign(HunkOfMetal.SHORTY);
 
         hunk.outakeCone(HunkOfMetal.SHORTY);
 
         hunk.forward(-1,6);
+
+        hunk.turnLeft(35,turnSpeed);
+
+        // Park according to cone
+        if(catCount > golemCount && catCount > pizzaCount){
+            hunk.forward(-driveSpeed,23);
+            hunk.chaChaRealSmooth(-.4,3);
+        }
+        else if(golemCount > catCount && golemCount > pizzaCount){
+            hunk.chaChaRealSmooth(-.4,3);
+        }
+        else {
+            hunk.forward(driveSpeed, 23);
+            hunk.chaChaRealSmooth(-.4,3);
+        }
+
+        hunk.lowerCone();
 
 
 

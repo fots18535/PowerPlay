@@ -408,7 +408,7 @@ public void coneStackAlign(){
     leftFront.setPower(-rpower);
     rightBack.setPower(rpower);
     rightFront.setPower(rpower);
-    while (mode.opModeIsActive() && lazerCenter.getDistance(DistanceUnit.INCH) >1.5){}
+    while (mode.opModeIsActive() && lazerCenter.getDistance(DistanceUnit.INCH) >1.8){}
 
     stopMotors();
 
@@ -436,11 +436,17 @@ public void coneStackAlign(){
             boolean givePower = true;
             boolean driveFoward = false;
 
+            mode.telemetry.addData("distance", distance);
             mode.telemetry.addData("leftLazer", a);
             mode.telemetry.addData("rightLazer", b);
             mode.telemetry.update();
 
-            if(a > b && b > distance) {
+            if (a < distance || b < distance){
+                givePower = false;
+                driveFoward = false;
+            }
+
+            else if(a > b && b > distance) {
 
                 correctionValue = -1 * (((b - 5) * 0.2) / 11 + 0.05);
                 givePower = true;
@@ -468,10 +474,7 @@ public void coneStackAlign(){
             }
 
             //end new stuff
-            else if (a < distance || b < distance){
-                givePower = false;
-                driveFoward = false;
-            }
+
 
             else
             {
