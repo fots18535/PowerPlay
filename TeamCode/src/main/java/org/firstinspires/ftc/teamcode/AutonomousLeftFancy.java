@@ -105,13 +105,14 @@ public class AutonomousLeftFancy extends LinearOpMode {
         hunk.forward(driveSpeed, 34);
 
         //raise arm
-        hunk.raiseCone(240*conestack + 50);
+        hunk.raiseCone(240*conestack + 150);
 
         //autoalign
-        hunk.autoAlign(240*conestack + 50, 12, 7.0);
+        hunk.autoAlign(240*conestack + 150, 12, 7.0);
+        hunk.raiseCone(240*conestack + 150);
 
         //go forward and pick up cone
-        hunk.coneStackAlign(240*conestack + 50);
+        hunk.coneStackAlign(240*conestack + 150);
 
         hunk.forward(-.2,1);
 

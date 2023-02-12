@@ -73,16 +73,16 @@ public class AutonomousRightFancy extends LinearOpMode {
         hunk.forwardWithArm(driveSpeed, 22, HunkOfMetal.MEDIUM);
         //Turn toward pole
         hunk.turnRight(35,turnSpeed);
-        hunk.raiseCone(HunkOfMetal.MEDIUM);
+        hunk.raiseCone(HunkOfMetal.MEDIUM + 100);
         //Raise cone
         //Auto align check start position
         long loco = hunk.getMotor();
         telemetry.addData("loco", loco);
-        hunk.autoAlign(HunkOfMetal.MEDIUM, 12.0, 7.0);
+        hunk.autoAlign(HunkOfMetal.MEDIUM + 100, 12.0, 7.0);
         //Measure distance driven
         long locoAfter = hunk.getMotor();
         telemetry.addData("locoAfter", locoAfter);
-        hunk.outakeCone(HunkOfMetal.MEDIUM);
+        hunk.outakeCone(HunkOfMetal.MEDIUM + 100);
         telemetry.addData("divide", (locoAfter - loco) / 59.0);
         telemetry.update();
 
@@ -105,13 +105,14 @@ public class AutonomousRightFancy extends LinearOpMode {
         hunk.forward(driveSpeed, 34);
 
         //raise arm
-        hunk.raiseCone(240*conestack);
+        hunk.raiseCone(240*conestack + 150);
 
         //autoalign
-        hunk.autoAlign(240*conestack, 12, 7.0);
+        hunk.autoAlign(240*conestack + 150, 12, 7.0);
+        hunk.raiseCone(240*conestack + 150);
 
         //go forward and pick up cone
-        hunk.coneStackAlign(240*conestack);
+        hunk.coneStackAlign(240*conestack + 150);
 
         hunk.forward(-.2,1);
 

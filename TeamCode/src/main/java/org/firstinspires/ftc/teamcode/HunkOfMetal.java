@@ -339,13 +339,15 @@ public class HunkOfMetal {
         }
     }
 
+    //double ticRampScale = 300.0;
+    //double ticRampScale = 150.0;
     private double ticRamp(int goal, int cur, double power) {
         double val = 0.0;
         if (goal == 0 && mag.isPressed()) {
             val = 0.0;
         }
-        else if (Math.abs(goal) - Math.abs(cur) <= 300) {
-            val = power * (Math.abs(goal) - Math.abs(cur)) / 300;
+        else if (Math.abs(goal) - Math.abs(cur) <= 200) {
+            val = power * (Math.abs(goal) - Math.abs(cur)) / 200;
         } else {
             val = power;
         }
@@ -405,14 +407,17 @@ public class HunkOfMetal {
     }
 public void coneStackAlign(int ticHeight){
 
+    slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
 
     intakeWheel.setPower(1.0);
     intakeWheelDeux.setPower(-1.0);
+    slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
     double rpower = .2;
     leftBack.setPower(-rpower);
     leftFront.setPower(-rpower);
     rightBack.setPower(rpower);
     rightFront.setPower(rpower);
+    slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
     ElapsedTime timer = new ElapsedTime();
     timer.reset();
 
@@ -437,14 +442,22 @@ public void coneStackAlign(int ticHeight){
         double leftY = 0.0;
         double distance = otherDistance;
 
+        slideMotor.setPower(ticRamp(ticHeight, slideMotor.getCurrentPosition(), -1.0));
+
         if(ticHeight > 5000)
         {
             distance = highDistance;
         }
 
+        LazerAverage lazerAvgLeft = new LazerAverage(lazerLeft, 5);
+        LazerAverage lazerAvgRight = new LazerAverage(lazerRight, 5);
         while (mode.opModeIsActive()) {
+            //double a = lazerAvgLeft.getDistance();
+            //double b = lazerAvgRight.getDistance();
+
             double a = lazerLeft.getDistance(DistanceUnit.INCH);
             double b = lazerRight.getDistance(DistanceUnit.INCH);
+
             double correctionValue = 0;
             boolean givePower = true;
             boolean driveFoward = false;
